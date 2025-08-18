@@ -2,7 +2,7 @@ import os
 from .caps_pipeline import CapsPipeline
 from pycaps.layout import SubtitleLayoutOptions, LineSplitter, LayoutUpdater, PositionsCalculator
 from pycaps.transcriber import AudioTranscriber, BaseSegmentSplitter, WhisperAudioTranscriber, PreviewTranscriber
-from typing import Optional
+from typing import Optional, List
 from pycaps.animation import Animation, ElementAnimator
 from pycaps.common import ElementType, EventType, VideoQuality, CacheStrategy
 from pycaps.tag import TagCondition, SemanticTagger, StructureTagger
@@ -60,7 +60,6 @@ class CapsPipelineBuilder:
     
     def with_whisper_config(self, language: Optional[str] = None, model_size: str = "medium", 
                            initial_prompt: Optional[str] = None, portuguese_vocabulary: Optional[List[str]] = None) -> "CapsPipelineBuilder":
-        from typing import List
         self._caps_pipeline._transcriber = WhisperAudioTranscriber(
             model_size=model_size, 
             language=language,
