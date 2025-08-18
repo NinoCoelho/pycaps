@@ -3,16 +3,26 @@ import os
 
 class Gpt(Llm):
 
-    OPENAI_API_KEY_NAME = "PYCAPS_OPENAI_API_KEY"
-
     def __init__(self):
         self._client = None
 
-    def send_message(self, prompt: str, model: str = "gpt-4.1-mini") -> str:
-        return self._get_client().responses.create(model=model, input=prompt).output_text
+    def send_message(self, prompt: str, model: str = None) -> str:
+        if model is None:
+            model = self._get_default_model()
+        
+        response = self._get_client().chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=1000,
+            temperature=0.1
+        )
+        return response.choices[0].message.content
     
     def is_enabled(self) -> bool:
-        return os.getenv(self.OPENAI_API_KEY_NAME) is not None
+        return os.getenv("OPENAI_API_KEY") is not None
+
+    def _get_default_model(self) -> str:
+        return os.getenv("PYCAPS_AI_MODEL", "gpt-4o-mini")
 
     def _get_client(self):
         try:
@@ -21,7 +31,14 @@ class Gpt(Llm):
             if self._client:
                 return self._client
 
-            self._client = OpenAI(api_key=os.getenv(self.OPENAI_API_KEY_NAME))
+            api_key = os.getenv("OPENAI_API_KEY")
+            base_url = os.getenv("OPENAI_BASE_URL")
+            
+            if base_url:
+                self._client = OpenAI(api_key=api_key, base_url=base_url)
+            else:
+                self._client = OpenAI(api_key=api_key)
+            
             return self._client
         except ImportError:
             raise ImportError(
@@ -31,5 +48,7 @@ class Gpt(Llm):
         except Exception as e:
             raise RuntimeError(
                 f"Error initializing OpenAI client: {e}\n\n"
-                "Please ensure you have authenticated correctly via PYCAPS_OPENAI_API_KEY."
+                "Please ensure you have set OPENAI_API_KEY environment variable.\n"
+                "Optionally set OPENAI_BASE_URL for compatible APIs like OpenRouter.\n"
+                "Optionally set PYCAPS_AI_MODEL to specify the model."
             )
