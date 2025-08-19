@@ -63,11 +63,21 @@ def render(
     preview: bool = typer.Option(False, "--preview", help="Generate a low quality preview of the rendered video", rich_help_panel="Utils"),
     preview_time: Optional[str] = typer.Option(None, "--preview-time", help="Generate a low quality preview of the rendered video at the given time, example: --preview-time=10,15", rich_help_panel="Utils", show_default=False),
     subtitle_data: Optional[str] = typer.Option(None, "--subtitle-data", help="Subtitle data file path. If provided, the rendering process will skip the transcription and tagging steps", rich_help_panel="Utils", show_default=False),
+    srt_file: Optional[str] = typer.Option(None, "--srt-file", help="SRT subtitle file to import (skips transcription). Example: --srt-file=subtitles.srt", rich_help_panel="Utils", show_default=False),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Verbose mode", rich_help_panel="Utils"),
 ):
     set_logging_level(logging.DEBUG if verbose else logging.INFO)
-    if template_name and config_file:
+    
+    # Validation: ensure only one input method is used
+    input_methods = [bool(template_name), bool(config_file)]
+    if sum(input_methods) > 1:
         typer.echo("Only one of --template or --config can be provided", err=True)
+        return None
+    
+    # Validation: ensure only one subtitle source is used
+    subtitle_sources = [bool(subtitle_data), bool(srt_file)]
+    if sum(subtitle_sources) > 1:
+        typer.echo("Only one of --subtitle-data or --srt-file can be provided", err=True)
         return None
     
     if not template_name and not config_file:
@@ -92,6 +102,9 @@ def render(
             portuguese_vocabulary=portuguese_vocab if portuguese_vocab else None
         )
     if subtitle_data: builder.with_subtitle_data_path(subtitle_data)
+    if srt_file: 
+        typer.echo(f"Using SRT file: {srt_file}")
+        builder.with_srt_file(srt_file)
     if transcription_preview: builder.should_preview_transcription(True)
     if video_quality: builder.with_video_quality(video_quality)
     if layout_align or layout_align_offset: builder.with_layout_options(_build_layout_options(builder, layout_align, layout_align_offset))

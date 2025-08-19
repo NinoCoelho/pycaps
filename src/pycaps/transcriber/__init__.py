@@ -5,6 +5,8 @@ from .splitter import LimitByWordsSplitter, LimitByCharsSplitter, BaseSegmentSpl
 from .editor import TranscriptionEditor
 from .preview_transcriber import PreviewTranscriber
 from .google_audio_transcriber import GoogleAudioTranscriber
+from .srt_transcriber import SRTTranscriber
+from .srt_loader import SRTLoader, SRTEntry
 
 __all__ = [
     "AudioTranscriber",
@@ -15,5 +17,8 @@ __all__ = [
     "SplitIntoSentencesSplitter",
     "TranscriptionEditor",
     "PreviewTranscriber",
-    "GoogleAudioTranscriber"
+    "GoogleAudioTranscriber",
+    "SRTTranscriber",
+    "SRTLoader",
+    "SRTEntry"
 ]

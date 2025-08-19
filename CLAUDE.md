@@ -3,7 +3,7 @@
 **Project Type:** Python Library & CLI Tool
 **Primary Technologies:** Python 3.10+, Whisper AI, Playwright, FFmpeg, OpenCV
 **Domain:** Video Subtitle Generation with CSS Styling
-**Last Updated:** 2025-08-18
+**Last Updated:** 2025-08-19
 
 ## Project Overview
 
@@ -11,6 +11,7 @@ pycaps is a sophisticated Python library for adding dynamic, CSS-styled subtitle
 
 ### Key Capabilities
 - Automatic speech-to-text transcription with word-level timestamps
+- **SRT file import with intelligent word-level timing estimation**
 - CSS-based subtitle rendering with browser-quality typography
 - Hierarchical animation system with primitives and presets
 - Smart content targeting through semantic and structural tagging
@@ -31,7 +32,7 @@ Document → Segment → Line → Word → WordClip
 - **WordClip**: Rendered word image with metadata
 
 ### Processing Pipeline
-1. **Transcription**: Audio → Text with timestamps
+1. **Transcription**: Audio → Text with timestamps *OR* SRT → Document structure
 2. **Segmentation**: Text → Logical segments
 3. **Tagging**: Apply semantic/structural tags
 4. **Selection**: Target specific content
@@ -96,6 +97,9 @@ pycaps render video.mp4 output.mp4 --template hype
 
 # Custom configuration
 pycaps render video.mp4 output.mp4 --config config.json
+
+# With SRT file (bypasses audio transcription)
+pycaps render video.mp4 output.mp4 --srt-file subtitles.srt --template hype
 ```
 
 ### Python API

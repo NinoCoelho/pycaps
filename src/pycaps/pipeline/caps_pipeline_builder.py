@@ -1,7 +1,7 @@
 import os
 from .caps_pipeline import CapsPipeline
 from pycaps.layout import SubtitleLayoutOptions, LineSplitter, LayoutUpdater, PositionsCalculator
-from pycaps.transcriber import AudioTranscriber, BaseSegmentSplitter, WhisperAudioTranscriber, PreviewTranscriber
+from pycaps.transcriber import AudioTranscriber, BaseSegmentSplitter, WhisperAudioTranscriber, PreviewTranscriber, SRTTranscriber
 from typing import Optional, List
 from pycaps.animation import Animation, ElementAnimator
 from pycaps.common import ElementType, EventType, VideoQuality, CacheStrategy
@@ -82,6 +82,17 @@ class CapsPipelineBuilder:
         self._caps_pipeline._subtitle_data_path_for_loading = subtitle_data_path
         return self
     
+    def with_srt_file(self, srt_file_path: str) -> "CapsPipelineBuilder":
+        """Configure pipeline to use SRT subtitle file instead of audio transcription."""
+        if srt_file_path and not os.path.exists(srt_file_path):
+            raise ValueError(f"SRT file not found: {srt_file_path}")
+        # Create SRT transcriber and set it as the transcriber
+        srt_transcriber = SRTTranscriber(srt_file_path)
+        self._caps_pipeline._transcriber = srt_transcriber
+        # Skip saving subtitle data since we're loading from SRT
+        self.should_save_subtitle_data(False)
+        return self
+    
     def should_save_subtitle_data(self, should_save: bool) -> "CapsPipelineBuilder":
         self._caps_pipeline._should_save_subtitle_data = should_save
         return self
@@ -119,10 +130,16 @@ class CapsPipelineBuilder:
         if not self._caps_pipeline._input_video_path:
             raise ValueError("Input video path is required")
         if preview_time:
-            logger().warning("Generating preview: using dummy text and reducing quality to save time.")
+            # Check if we're using an SRT transcriber - if so, preserve it and don't use dummy text
+            using_srt = isinstance(self._caps_pipeline._transcriber, SRTTranscriber)
+            if using_srt:
+                logger().warning("Generating preview with SRT content and reduced quality to save time.")
+            else:
+                logger().warning("Generating preview: using dummy text and reducing quality to save time.")
+                self.with_custom_audio_transcriber(PreviewTranscriber())
+            
             self.with_video_quality(VideoQuality.LOW)
             self.should_save_subtitle_data(False)
-            self.with_custom_audio_transcriber(PreviewTranscriber())
             self._caps_pipeline._preview_time = preview_time
         
         pipeline = self._caps_pipeline

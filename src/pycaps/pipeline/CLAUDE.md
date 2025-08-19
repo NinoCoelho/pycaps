@@ -3,11 +3,11 @@
 **Module Type:** Core Processing Orchestration
 **Primary Technologies:** Python, Pydantic, Multiprocessing, JSON Configuration
 **Dependencies:** All pycaps modules (transcriber, renderer, animation, etc.)
-**Last Updated:** 2025-08-18
+**Last Updated:** 2025-08-19
 
 ## Module Overview
 
-The Pipeline module is the central orchestration system for pycaps. It coordinates the entire video subtitle generation workflow, from audio transcription through final video composition. The module implements a flexible builder pattern that allows for both programmatic and configuration-driven pipeline construction.
+The Pipeline module is the central orchestration system for pycaps. It coordinates the entire video subtitle generation workflow, from audio transcription or SRT import through final video composition. The module implements a flexible builder pattern that allows for both programmatic and configuration-driven pipeline construction with support for multiple input sources.
 
 ### Core Responsibilities
 - Workflow orchestration across all pycaps modules
@@ -70,6 +70,7 @@ pipeline = (builder
 
 **Configuration Categories**:
 - **Transcriber Settings** - Model selection, language, quality
+- **SRT Import** - Subtitle file import with intelligent timing
 - **Template Configuration** - Styling templates and overrides
 - **Effect Chains** - Text and clip effects to apply
 - **Animation Sequences** - Entrance/exit animations
@@ -297,6 +298,27 @@ config = {
 
 pipeline = CapsPipeline.from_config(config)
 result = pipeline.process("input.mp4", "output.mp4")
+```
+
+### SRT File Processing
+```python
+from pycaps.pipeline import CapsPipelineBuilder
+
+# Basic SRT processing
+builder = CapsPipelineBuilder()
+pipeline = (builder
+    .with_input_video("input.mp4")
+    .with_srt_file("subtitles.srt")
+    .with_template("hype")
+    .build())
+
+result = pipeline.process("input.mp4", "output.mp4")
+
+# SRT with custom styling
+pipeline = (builder
+    .with_srt_file("subtitles.srt")
+    .with_effects([{"type": "emoji", "intensity": 0.5}])
+    .build())
 ```
 
 ### Batch Processing

@@ -83,7 +83,52 @@ print("Video has been rendered!")
 ```
 
 ---
-## Example 3: Advanced JSON with Tagger and Effects
+## Example 3: SRT File Import with Python
+
+This example shows how to use an existing SRT subtitle file instead of transcribing audio, which significantly speeds up processing.
+
+**`process_with_srt.py`**
+```python
+from pycaps.pipeline import CapsPipelineBuilder
+
+# Create pipeline with SRT file input
+builder = CapsPipelineBuilder()
+pipeline = (builder
+    .with_input_video("my_video.mp4")
+    .with_output_video("styled_subtitles.mp4")
+    .with_srt_file("subtitles.srt")  # Use existing SRT file
+    .with_template("hype")           # Apply styling template
+    .build())
+
+# Run the pipeline
+pipeline.run()
+
+print("SRT-based video has been rendered!")
+```
+
+**`subtitles.srt`** (example SRT file)
+```srt
+1
+00:00:00,000 --> 00:00:02,500
+Welcome to our presentation today.
+
+2
+00:00:02,500 --> 00:00:05,000
+We'll be discussing the latest innovations.
+
+3
+00:00:05,000 --> 00:00:08,000
+These technologies will change everything.
+```
+
+**Benefits of SRT Import:**
+- **Faster Processing**: Skips audio transcription entirely
+- **Precise Control**: Use professionally created subtitles
+- **Multiple Languages**: Works with any language SRT file
+- **Full Styling**: All pycaps templates and effects still apply
+
+---
+## Example 4: Advanced JSON with Tagger and Effects
 
 This example demonstrates a more complex setup using a JSON file. It uses a wordlist to tag specific words and applies a sound effect to them.
 
@@ -140,7 +185,7 @@ pycaps render --input video.mp4 --template my_template
 ```
 
 ---
-## Example 4: Advanced Python Script with Custom Logic
+## Example 5: Advanced Python Script with Custom Logic
 
 This script showcases the full power of the Python library. It defines a complex pipeline with multiple animations, conditional effects, and custom taggers.
 

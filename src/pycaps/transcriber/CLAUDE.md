@@ -1,16 +1,17 @@
 # Transcriber Module - Claude Context
 
-**Module Type:** Audio Transcription & Speech Processing
+**Module Type:** Audio Transcription & Subtitle Import Processing
 **Primary Technologies:** OpenAI Whisper, Google Speech API, Audio Processing
 **Dependencies:** torch, librosa, pydub, google-cloud-speech, webvtt
-**Last Updated:** 2025-08-18
+**Last Updated:** 2025-08-19
 
 ## Module Overview
 
-The Transcriber module handles speech-to-text conversion with word-level timestamps, providing the foundation for all subtitle generation in pycaps. It supports multiple transcription backends, intelligent audio preprocessing, and sophisticated text segmentation strategies. The module is designed for high accuracy and performance with extensive customization options.
+The Transcriber module handles speech-to-text conversion and subtitle file import with word-level timestamps, providing the foundation for all subtitle generation in pycaps. It supports multiple transcription backends, SRT file import with intelligent timing estimation, intelligent audio preprocessing, and sophisticated text segmentation strategies. The module is designed for high accuracy and performance with extensive customization options.
 
 ### Core Capabilities
 - Multi-provider transcription (Whisper, Google Speech, custom providers)
+- **SRT file import with intelligent word-level timing estimation**
 - Word-level timestamp extraction with high precision
 - Intelligent audio preprocessing and enhancement
 - Multiple segmentation strategies for natural text grouping
@@ -32,6 +33,7 @@ BaseTranscriber
 ├── WhisperTranscriber (primary)
 ├── GoogleSpeechTranscriber
 ├── AzureSpeechTranscriber
+├── SRTTranscriber (subtitle import)
 └── CustomTranscriber (extensible)
 ```
 
@@ -135,7 +137,59 @@ class GoogleSpeechTranscriber(BaseTranscriber):
         return self._process_google_result(response)
 ```
 
-### 4. Audio Preprocessing (`audio_processor.py`)
+### 4. SRT Transcriber (`srt_transcriber.py`)
+
+**Purpose**: SRT subtitle file import with intelligent word-level timing estimation
+**Key Features**:
+- Parse standard SRT format files
+- Convert segment-level timing to word-level estimates
+- Handle HTML tag cleaning and text normalization
+- Support multiple encodings (UTF-8, Latin-1)
+- Intelligent word timing distribution based on text characteristics
+
+```python
+class SRTTranscriber(AudioTranscriber):
+    def __init__(self, srt_path: str):
+        self.srt_path = srt_path
+    
+    def transcribe(self, audio_path: str) -> Document:
+        # Load SRT entries
+        srt_entries = SRTLoader.load_srt(self.srt_path)
+        
+        # Convert to Document structure with word-level timing
+        document = Document()
+        for srt_entry in srt_entries:
+            segment = self._create_segment_from_srt_entry(srt_entry)
+            document.segments.add(segment)
+        
+        return document
+```
+
+**Word Timing Algorithm**:
+The SRT transcriber estimates individual word timings using:
+- Word length and syllable count estimation
+- Text complexity analysis (numbers, punctuation)
+- Proportional time distribution within segment duration
+- Natural speech pattern considerations
+
+### 5. SRT Loader (`srt_loader.py`)
+
+**Purpose**: Robust SRT file parsing and validation utility
+**Key Features**:
+- Parse standard SRT timestamp format
+- Clean HTML-like formatting tags
+- Handle encoding variations
+- Validate SRT structure and timing
+
+```python
+class SRTLoader:
+    @classmethod
+    def load_srt(cls, srt_path: str) -> List[SRTEntry]:
+        # Handles file reading, parsing, and validation
+        return parsed_entries
+```
+
+### 6. Audio Preprocessing (`audio_processor.py`)
 
 **Purpose**: Enhance audio quality for better transcription accuracy
 **Processing Steps**:
@@ -186,7 +240,7 @@ class GoogleSpeechTranscriber(BaseTranscriber):
        return merge_close_segments(segments)
    ```
 
-### 5. Segmentation Strategies (`splitter/`)
+### 7. Segmentation Strategies (`splitter/`)
 
 **Purpose**: Intelligent text segmentation for natural subtitle grouping
 
@@ -262,7 +316,7 @@ class SmartSplitter(BaseSegmentSplitter):
         return self._select_best_segmentation(candidates)
 ```
 
-### 6. Interactive Editor (`editor/`)
+### 8. Interactive Editor (`editor/`)
 
 **Purpose**: GUI for manual transcription correction and timing adjustment
 
@@ -294,7 +348,7 @@ class TranscriptionEditor:
         pass
 ```
 
-### 7. Transcription Result (`transcription_result.py`)
+### 9. Transcription Result (`transcription_result.py`)
 
 **Purpose**: Standardized output format for all transcription providers
 
@@ -582,6 +636,8 @@ class CustomTranscriber(BaseTranscriber):
 - **`BaseTranscriber`** - Abstract transcription interface
 - **`WhisperTranscriber`** - Whisper implementation
 - **`GoogleSpeechTranscriber`** - Google Speech implementation
+- **`SRTTranscriber`** - SRT file import with intelligent timing
+- **`SRTLoader`** - SRT file parsing and validation utility
 - **`TranscriptionResult`** - Standardized output format
 - **`AudioProcessor`** - Audio preprocessing utilities
 

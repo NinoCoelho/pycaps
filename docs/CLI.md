@@ -52,7 +52,28 @@ This will create a new video named `output_... .mp4` in your current directory.
     pycaps render ... --preview-time 10.5,15
     ```
 -   `--subtitle-data <path>`: Skips transcription and uses a pre-generated `.json` data file. Great for re-rendering with different styles.
+-   `--srt-file <path>`: Import subtitles from an SRT file instead of transcribing audio. Pycaps will intelligently estimate word-level timings from the segment-level SRT data.
 -   `-v`, `--verbose`: Show detailed logs during processing.
+
+### SRT File Examples
+
+Using SRT files can significantly speed up processing since it skips audio transcription:
+
+```bash
+# Basic SRT processing
+pycaps render --input my_video.mp4 --srt-file subtitles.srt --template hype
+
+# SRT with custom output name
+pycaps render --input video.mp4 --output final_video.mp4 --srt-file subtitles.srt --template minimalist
+
+# SRT with style overrides
+pycaps render --input video.mp4 --srt-file subtitles.srt --template default --style ".word.color=red"
+
+# Quick SRT preview
+pycaps render --input video.mp4 --srt-file subtitles.srt --template vibrant --preview
+```
+
+**Note**: When using `--srt-file`, pycaps will intelligently distribute the timing from SRT segments to individual words based on word characteristics like length, syllables, and complexity.
 
 ## `pycaps preview-styles`
 
