@@ -33,17 +33,17 @@ If you prefer to use your own OpenAI account and billing, you can provide your o
 
 ### How to set up:
 
-You must set an environment variable named `PYCAPS_OPENAI_API_KEY`.
+You must set an environment variable named `OPENAI_API_KEY`.
 
 **On macOS/Linux:**
 ```bash
-export PYCAPS_OPENAI_API_KEY="sk-YourOpenAIKeyHere"
+export OPENAI_API_KEY="sk-YourOpenAIKeyHere"
 ```
 You can add this line to your shell profile (e.g., `~/.zshrc`, `~/.bash_profile`) to make it permanent.
 
 **On Windows (Command Prompt):**
 ```powershell
-setx PYCAPS_OPENAI_API_KEY "sk-YourOpenAIKeyHere"
+setx OPENAI_API_KEY "sk-YourOpenAIKeyHere"
 ```
 You may need to restart your terminal for the change to take effect.
 
@@ -52,5 +52,27 @@ You may need to restart your terminal for the change to take effect.
 When an AI feature is used, pycaps checks for keys in the following order:
 
 1.  It first looks for a key set via the `pycaps config --set-api-key` command (the **Pycaps API** key).
-2.  If that is not found, it then checks for the `PYCAPS_OPENAI_API_KEY` environment variable (your **own OpenAI key**).
+2.  If that is not found, it then checks for the `OPENAI_API_KEY` environment variable (your **own OpenAI key**).
 3.  If neither is found, AI-dependent features will be disabled, and a warning will be logged.
+
+## Disabling AI Features
+
+If you want to disable AI functionality entirely (even when API keys are available), you can set the `PYCAPS_AI_ENABLED` environment variable:
+
+**On macOS/Linux:**
+```bash
+export PYCAPS_AI_ENABLED=false
+```
+
+**On Windows (Command Prompt):**
+```powershell
+setx PYCAPS_AI_ENABLED false
+```
+
+This can be useful when you want to ensure no AI calls are made, regardless of available API keys. The variable accepts the following values to disable AI:
+- `false`
+- `0` 
+- `no`
+- `off`
+
+Any other value (or omitting the variable) will enable AI features if API keys are available.

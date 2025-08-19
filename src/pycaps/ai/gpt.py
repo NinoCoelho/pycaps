@@ -19,6 +19,12 @@ class Gpt(Llm):
         return response.choices[0].message.content
     
     def is_enabled(self) -> bool:
+        # Check if AI functionality is explicitly disabled
+        ai_enabled = os.getenv("PYCAPS_AI_ENABLED", "true").lower()
+        if ai_enabled in ("false", "0", "no", "off"):
+            return False
+        
+        # AI is enabled if API key is available
         return os.getenv("OPENAI_API_KEY") is not None
 
     def _get_default_model(self) -> str:

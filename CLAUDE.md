@@ -78,6 +78,7 @@ pip install pycaps
 - **Data**: pydantic, numpy
 
 ### Environment Variables
+- `PYCAPS_AI_ENABLED` - Enable/disable AI functionality (optional, defaults to "true", set to "false"/"0"/"no"/"off" to disable)
 - `OPENAI_API_KEY` - For AI-powered features (tagging, summarization) - required for AI functionality
 - `OPENAI_BASE_URL` - Custom API endpoint (optional, for OpenRouter or other OpenAI-compatible APIs)
 - `PYCAPS_AI_MODEL` - AI model to use (optional, defaults to "gpt-4o-mini")
