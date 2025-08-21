@@ -3,20 +3,22 @@
 **Project Type:** Python Library & CLI Tool
 **Primary Technologies:** Python 3.10+, Whisper AI, Playwright, FFmpeg, OpenCV
 **Domain:** Video Subtitle Generation with CSS Styling
-**Last Updated:** 2025-08-19
+**Last Updated:** 2025-08-21
 
 ## Project Overview
 
 pycaps is a sophisticated Python library for adding dynamic, CSS-styled subtitles to videos. It's designed for creating engaging short-form video content for platforms like TikTok, YouTube Shorts, and Instagram Reels. The project combines AI transcription, advanced text rendering, and powerful animation capabilities.
 
 ### Key Capabilities
+- **Advanced anti-hallucination Whisper transcription** with VAD preprocessing and chunking
 - Automatic speech-to-text transcription with word-level timestamps
 - **SRT file import with intelligent word-level timing estimation**
 - CSS-based subtitle rendering with browser-quality typography
 - Hierarchical animation system with primitives and presets
 - Smart content targeting through semantic and structural tagging
-- Template-based styling with 11 built-in templates
+- Template-based styling with 12 built-in templates
 - CLI and programmatic Python API interfaces
+- **Duration-based adaptive configuration** for optimal transcription quality
 
 ## Architecture Overview
 
@@ -72,7 +74,8 @@ pip install pycaps
 
 ### Dependencies
 - **Core**: Python 3.10+, setuptools
-- **Transcription**: openai-whisper, google-cloud-speech
+- **Transcription**: openai-whisper, google-cloud-speech, librosa, soundfile, torch
+- **Anti-hallucination**: silero-vad (via torch.hub), numpy
 - **Rendering**: playwright, pillow
 - **Video**: opencv-python, ffmpeg-python, pydub
 - **CLI**: typer, rich
@@ -100,19 +103,36 @@ pycaps render video.mp4 output.mp4 --config config.json
 
 # With SRT file (bypasses audio transcription)
 pycaps render video.mp4 output.mp4 --srt-file subtitles.srt --template hype
+
+# Advanced transcription for long videos (anti-hallucination)
+pycaps render long_video.mp4 output.mp4 --transcription-quality maximum_quality
+
+# Podcast-optimized transcription
+pycaps render podcast.mp4 output.mp4 --transcription-quality podcasts
 ```
 
 ### Python API
 ```python
 from pycaps import CapsPipeline
+from pycaps.transcriber import WhisperAudioTranscriber
 
 # Basic usage
 pipeline = CapsPipeline()
 pipeline.process("input.mp4", "output.mp4")
 
-# With configuration
-pipeline = CapsPipeline.from_config("config.json")
-pipeline.process("input.mp4", "output.mp4")
+# With advanced anti-hallucination transcription
+transcriber = WhisperAudioTranscriber(
+    model_size="medium",
+    anti_hallucination_config="maximum_quality"
+)
+pipeline = CapsPipeline(transcriber=transcriber)
+pipeline.process("long_video.mp4", "output.mp4")
+
+# Preset configurations for different content types
+transcriber = WhisperAudioTranscriber(
+    model_size="large-v2",
+    anti_hallucination_config="podcasts"  # or "short_videos", "balanced"
+)
 ```
 
 ## Configuration System
@@ -190,6 +210,8 @@ pytest tests/
 2. **FFmpeg missing**: Install system FFmpeg
 3. **Memory errors**: Reduce batch size or video resolution
 4. **Transcription failures**: Check audio quality and format
+5. **Whisper hallucinations**: Use anti-hallucination configs for videos >90s
+6. **VAD model download**: Silero VAD downloads automatically via torch.hub
 
 ### Debug Mode
 ```python
@@ -230,7 +252,17 @@ logging.basicConfig(level=logging.DEBUG)
 
 ## Project Roadmap
 
-### Current Version: 0.1.0 (Alpha)
+### Current Version: 0.2.0 (Alpha)
+
+### New in v0.2.0
+- **Anti-hallucination transcription system** for long videos (>90s)
+- **VAD (Voice Activity Detection)** preprocessing with Silero VAD
+- **Enhanced chunking strategy** with overlapping segments
+- **Advanced post-processing filters** (compression ratio, semantic similarity, looping detection)
+- **Model selection optimization** with automatic fallbacks
+- **Duration-based adaptive configuration** 
+- **Preset configurations** for different content types
+- **Improved dependencies** (librosa, soundfile, torch)
 
 ### Planned Features
 - Test suite implementation
@@ -239,6 +271,8 @@ logging.basicConfig(level=logging.DEBUG)
 - More built-in templates
 - Advanced effect system
 - Real-time preview improvements
+- WebRTC real-time transcription
+- GPU acceleration optimizations
 
 ## Contributing Guidelines
 
@@ -256,4 +290,4 @@ logging.basicConfig(level=logging.DEBUG)
 5. Submit PR with clear description
 
 ---
-*pycaps v0.1.0 | CSS-styled video subtitles | AI-powered transcription | Modular architecture*
+*pycaps v0.2.0 | CSS-styled video subtitles | Anti-hallucination AI transcription | Modular architecture*

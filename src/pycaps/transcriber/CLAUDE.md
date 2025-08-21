@@ -3,7 +3,7 @@
 **Module Type:** Audio Transcription & Subtitle Import Processing
 **Primary Technologies:** OpenAI Whisper, Google Speech API, Audio Processing
 **Dependencies:** torch, librosa, pydub, google-cloud-speech, webvtt
-**Last Updated:** 2025-08-19
+**Last Updated:** 2025-08-21
 
 ## Module Overview
 
@@ -60,9 +60,9 @@ class BaseTranscriber(ABC):
     def validate_config(self, config: dict) -> bool
 ```
 
-### 2. Whisper Transcriber (`whisper_transcriber.py`)
+### 2. Whisper Audio Transcriber (`whisper_audio_transcriber.py`)
 
-**Purpose**: OpenAI Whisper integration for high-quality transcription
+**Purpose**: OpenAI Whisper integration for high-quality transcription with Portuguese language optimizations
 **Model Options**:
 - **tiny** - Fastest, least accurate (~32x realtime)
 - **base** - Balanced speed/accuracy (~16x realtime)
@@ -73,21 +73,55 @@ class BaseTranscriber(ABC):
 - **large-v3** - Current best model
 
 **Key Features**:
+- **Portuguese Language Optimizations**: Specialized compound word processing and religious vocabulary recognition
+- **Repetition Filtering**: Intelligent removal of repetitive segments that Whisper sometimes generates
+- **Custom Vocabulary Support**: User-provided Portuguese terms for better recognition
+- **Enhanced Prompt Engineering**: Optimized initial prompts for Portuguese transcription
+
 ```python
-class WhisperTranscriber(BaseTranscriber):
-    def __init__(self, model_name: str = "base", language: str = None):
-        self.model = whisper.load_model(model_name)
-        self.language = language
+class WhisperAudioTranscriber(AudioTranscriber):
+    def __init__(self, model_size: str = "medium", language: Optional[str] = None, 
+                 model: Optional[Any] = None, initial_prompt: Optional[str] = None, 
+                 portuguese_vocabulary: Optional[List[str]] = None):
+        """
+        Transcribes audio using OpenAI's Whisper model with Portuguese optimizations.
+        
+        Args:
+            model_size: Size of the Whisper model to use (e.g., "tiny", "base", "medium").
+            language: Language of the audio (e.g., "en", "pt").
+            model: (Optional) A pre-loaded Whisper model instance.
+            initial_prompt: Custom prompt to guide transcription (max 244 tokens).
+            portuguese_vocabulary: List of Portuguese compound/religious terms to recognize.
+        """
     
-    async def transcribe(self, audio_file: str) -> TranscriptionResult:
-        # Word-level timestamp extraction
-        result = self.model.transcribe(
-            audio_file, 
+    def transcribe(self, audio_path: str) -> Document:
+        # Enhanced Whisper parameters for better accuracy
+        result = self._get_model().transcribe(
+            audio_path,
             word_timestamps=True,
-            language=self.language
+            language=self._language,
+            initial_prompt=prompt,
+            temperature=0.0,  # More deterministic output
+            compression_ratio_threshold=2.4,
+            logprob_threshold=-1.0,
+            no_speech_threshold=0.6,
+            condition_on_previous_text=False,  # Prevent repetition loops
+            suppress_tokens=[-1]
         )
-        return self._process_whisper_result(result)
+        
+        # Apply Portuguese post-processing and repetition removal
+        if self._language == "pt" or not self._language:
+            document = self._post_process_portuguese_compounds(document)
+        document = self._remove_repetitive_segments(document)
+        
+        return document
 ```
+
+**Portuguese Optimizations**:
+- **Compound Word Processing**: Fixes split reflexive verbs (e.g., "ajoelhou se" → "ajoelhou-se")
+- **Religious Vocabulary**: Specialized recognition for biblical terms like "Getsêmani"
+- **Prefix Handling**: Proper handling of Portuguese prefixes (bem-, mal-, auto-, anti-, etc.)
+- **Repetition Detection**: Removes excessive repetitive segments from transcription output
 
 **Configuration Options**:
 ```json

@@ -3,11 +3,11 @@
 **Module Type:** Template System & Resource Management
 **Primary Technologies:** JSON Configuration, CSS3, Resource Bundling, File Management
 **Dependencies:** Pydantic, pathlib, json, typing
-**Last Updated:** 2025-08-18
+**Last Updated:** 2025-08-21
 
 ## Module Overview
 
-The Template module provides a comprehensive template system for pycaps that packages styling, animations, effects, and configurations into reusable components. It manages 11 built-in templates and supports custom template creation with CSS bundling, resource management, and inheritance capabilities.
+The Template module provides a comprehensive template system for pycaps that packages styling, animations, effects, and configurations into reusable components. It manages 12 built-in templates and supports custom template creation with CSS bundling, resource management, and inheritance capabilities.
 
 ### Core Responsibilities
 - Template loading and validation
@@ -31,16 +31,17 @@ Template Structure:
 
 ### Available Templates
 1. **default** - Clean, professional styling
-2. **minimalist** - Simple, understated design
+2. **minimalist** - Simple, understated design  
 3. **hype** - High-energy, vibrant effects
 4. **retro-gaming** - Pixelated, arcade-style
-5. **neon** - Glowing, cyberpunk aesthetic
-6. **corporate** - Business-friendly styling
-7. **social** - Social media optimized
-8. **cinematic** - Movie-style subtitles
-9. **comic** - Comic book styling
-10. **elegant** - Sophisticated typography
-11. **cyberpunk** - Futuristic, tech aesthetic
+5. **redpill** - Red pill-shaped subtitle styling with distinctive background
+6. **explosive** - Dynamic, energetic styling
+7. **fast** - Quick, streamlined appearance
+8. **line-focus** - Line-based emphasis styling
+9. **neo-minimal** - Modern minimalist approach
+10. **vibrant** - Colorful, lively presentation
+11. **word-focus** - Individual word emphasis
+12. **classic** - Traditional subtitle styling
 
 ### Template Selection Strategy
 ```python
