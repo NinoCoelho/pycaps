@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.2] - 2025-08-22
+
+### 🐛 Bug Fixes
+
+#### Translation System Fixes
+- **Fixed partial translation bug** where only half of the segments would be translated
+- **Improved batch translation reliability** for both Google Translate and DeepL services
+- **Enhanced separator preservation handling** when translation services don't preserve `[SEP]` markers
+- **Added robust fallback logic** to ensure all segments get translated individually if batching fails
+- **Improved error logging** with detailed warnings about translation failures
+- **Added array length validation** to prevent segments from being skipped during translation
+
+#### Translation Quality Improvements
+- **Better error recovery** - segments that fail translation now fallback gracefully to individual translation
+- **Comprehensive segment validation** - ensures every segment gets processed even with service failures  
+- **Enhanced debugging** - verbose logging shows exactly which segments are being translated
+- **Consistent output** - users now get complete Portuguese subtitles instead of mixed English/Portuguese
+
+### 🔧 Technical Improvements
+- **Google Translate batch processing** - fixed separator handling and fallback logic
+- **DeepL batch processing** - applied same robustness improvements as Google Translate
+- **Translation loop validation** - added safety checks in main translation orchestration
+- **Graceful degradation** - keeps original text only when translation completely fails
+
+---
+
 ## [0.3.0] - 2025-08-22
 
 ### 🎯 Major Features Added

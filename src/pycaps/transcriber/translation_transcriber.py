@@ -243,11 +243,24 @@ class TranslationTranscriber(AudioTranscriber):
                 )
                 
                 # Combine translations with original segments
+                # Ensure we have exactly the same number of translations as batch items
+                if len(translated_texts) != len(batch):
+                    logger.warning(f"Mismatch between batch size ({len(batch)}) and translations ({len(translated_texts)})")
+                
                 for j, translated_text in enumerate(translated_texts):
-                    if j < len(batch):
+                    if j < len(batch):  # Safety check
                         segment_info = batch[j].copy()
                         segment_info['translated_text'] = translated_text
                         translated_segments.append(segment_info)
+                    else:
+                        logger.error(f"Translation index {j} exceeds batch size {len(batch)}")
+                
+                # Handle case where we got fewer translations than expected
+                for j in range(len(translated_texts), len(batch)):
+                    logger.warning(f"Missing translation for batch item {j}, using original text")
+                    segment_info = batch[j].copy()
+                    segment_info['translated_text'] = segment_info['text']  # Keep original
+                    translated_segments.append(segment_info)
                 
             except TranslationError as e:
                 logger.error(f"Batch translation failed: {e}")

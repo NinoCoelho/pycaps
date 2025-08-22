@@ -141,12 +141,24 @@ class DeepLTranslationService(TranslationService):
                 
                 # Handle case where separator wasn't preserved
                 if len(translated_parts) != len(batch):
-                    logger.warning("DeepL didn't preserve separators, falling back to individual translation")
+                    logger.warning(f"DeepL didn't preserve separators: expected {len(batch)} parts, got {len(translated_parts)}. Falling back to individual translation")
                     translated_parts = []
                     for text in batch:
-                        translated_parts.append(
-                            self.translate(text, source_language, target_language)
-                        )
+                        try:
+                            individual_translation = self.translate(text, source_language, target_language)
+                            translated_parts.append(individual_translation)
+                            logger.debug(f"Individual DeepL translation: '{text}' -> '{individual_translation}'")
+                        except Exception as e:
+                            logger.error(f"Individual DeepL translation failed for '{text}': {e}")
+                            # Keep original text as fallback
+                            translated_parts.append(text)
+                    
+                    # Verify we have the correct number of translations
+                    if len(translated_parts) != len(batch):
+                        logger.error(f"DeepL translation fallback failed: expected {len(batch)} translations, got {len(translated_parts)}")
+                        # Pad with original text if needed
+                        while len(translated_parts) < len(batch):
+                            translated_parts.append(batch[len(translated_parts)])
                 
                 # Assign results back to original positions
                 for j, translated in enumerate(translated_parts):
