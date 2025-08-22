@@ -19,6 +19,63 @@ class WhisperConfig(BaseConfigModel):
     portuguese_vocabulary: Optional[list[str]] = None
     anti_hallucination_preset: Literal["maximum_quality", "balanced", "fast_processing", "podcasts", "short_videos"] = "balanced"
 
+class FasterWhisperConfig(BaseConfigModel):
+    model: Literal["tiny", "base", "small", "medium", "large", "large-v2", "large-v3"] = "base"
+    language: Optional[str] = None
+    device: Literal["auto", "cpu", "cuda"] = "auto"
+    compute_type: Literal["default", "int8", "int8_float16", "int16", "float16", "float32"] = "default"
+    use_vad: bool = True
+    vad_threshold: float = 0.5
+    hallucination_silence_threshold: float = 2.0
+    condition_on_previous_text: bool = False
+    temperature: float = 0.0
+    repetition_penalty: float = 1.1
+
+class TranslationConfig(BaseConfigModel):
+    source_language: str = "en"
+    target_language: str = "pt"
+    transcriber_type: Literal["whisper", "faster_whisper"] = "faster_whisper"
+    model_size: Literal["tiny", "base", "small", "medium", "large", "large-v2", "large-v3"] = "base"
+    translation_provider: Literal["deepl", "google"] = "deepl"
+    deepl_api_key: Optional[str] = None
+    max_line_length: int = 42
+    max_lines: int = 2
+    reading_speed: int = 17
+    max_duration: float = 6.0
+    min_duration: float = 1.0
+    save_original_transcription: bool = True
+    enable_context_translation: bool = True
+    batch_size: int = 5
+    
+    @field_validator("max_line_length", "max_lines", "reading_speed")
+    @classmethod
+    def validate_positive_values(cls, v: int, info) -> int:
+        if v <= 0:
+            raise ValueError(f"{info.field_name} must be greater than 0")
+        return v
+    
+    @field_validator("max_duration", "min_duration")
+    @classmethod
+    def validate_positive_durations(cls, v: float, info) -> float:
+        if v <= 0:
+            raise ValueError(f"{info.field_name} must be greater than 0")
+        return v
+    
+    @field_validator("max_duration")
+    @classmethod
+    def validate_max_duration(cls, v: float, info) -> float:
+        min_duration = info.data.get("min_duration")
+        if min_duration is not None and v <= min_duration:
+            raise ValueError(f"max_duration must be greater than min_duration ({min_duration})")
+        return v
+
+class PortugueseTranslationConfig(BaseConfigModel):
+    transcriber_type: Literal["whisper", "faster_whisper"] = "faster_whisper"
+    model_size: Literal["tiny", "base", "small", "medium", "large", "large-v2", "large-v3"] = "base"
+    variant: Literal["pt", "pt-BR"] = "pt"
+    translation_provider: Literal["deepl", "google"] = "deepl"
+    deepl_api_key: Optional[str] = None
+
 class LimitByWordsSplitterConfig(BaseConfigModel):
     type: Literal["limit_by_words"]
     limit: int
@@ -175,6 +232,9 @@ class JsonSchema(BaseConfigModel):
     css: Optional[str] = None
     video: Optional[VideoConfig] = None
     whisper: Optional[WhisperConfig] = None
+    faster_whisper: Optional[FasterWhisperConfig] = None
+    translation: Optional[TranslationConfig] = None
+    portuguese_translation: Optional[PortugueseTranslationConfig] = None
     layout: Optional[SubtitleLayoutOptions] = None
     splitters: list[SplitterConfig] = []
     effects: list[EffectConfig] = []

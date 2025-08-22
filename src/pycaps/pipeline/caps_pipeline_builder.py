@@ -1,7 +1,7 @@
 import os
 from .caps_pipeline import CapsPipeline
 from pycaps.layout import SubtitleLayoutOptions, LineSplitter, LayoutUpdater, PositionsCalculator
-from pycaps.transcriber import AudioTranscriber, BaseSegmentSplitter, WhisperAudioTranscriber, PreviewTranscriber, SRTTranscriber
+from pycaps.transcriber import AudioTranscriber, BaseSegmentSplitter, WhisperAudioTranscriber, PreviewTranscriber, SRTTranscriber, TranslationTranscriber
 from pycaps.transcriber.anti_hallucination_config import AntiHallucinationConfig
 from typing import Union
 from typing import Optional, List
@@ -140,6 +140,101 @@ class CapsPipelineBuilder:
             repetition_penalty=1.1  # Penalize repetitions
         )
         return self
+    
+    def with_translation(
+        self,
+        source_language: str = "en",
+        target_language: str = "pt",
+        transcriber_type: str = "faster_whisper",
+        model_size: str = "base",
+        translation_provider: str = "deepl",
+        deepl_api_key: Optional[str] = None,
+        max_line_length: int = 42,
+        reading_speed: int = 17,
+        enable_context_translation: bool = True
+    ) -> "CapsPipelineBuilder":
+        """Configure pipeline for English-to-Portuguese translation.
+        
+        This method enables high-precision translation using the enhanced
+        specification from english-portuguese-enhancement.md.
+        
+        Args:
+            source_language: Source language code (e.g., "en")
+            target_language: Target language code (e.g., "pt", "pt-BR") 
+            transcriber_type: "whisper" or "faster_whisper" (recommended)
+            model_size: Whisper model size for transcription
+            translation_provider: "deepl" (recommended) or "google"
+            deepl_api_key: DeepL API key (optional, can use env var DEEPL_API_KEY)
+            max_line_length: Maximum characters per line for Portuguese (Netflix: 42)
+            reading_speed: Reading speed in chars/second for Portuguese (17-20)
+            enable_context_translation: Use context-aware batch translation
+            
+        Returns:
+            Self for method chaining
+            
+        Example:
+            pipeline = (CapsPipelineBuilder()
+                .with_input_video("english_video.mp4")
+                .with_translation(
+                    source_language="en",
+                    target_language="pt-BR", 
+                    translation_provider="deepl",
+                    deepl_api_key="your-key"
+                )
+                .with_output_video("portuguese_subtitles.mp4")
+                .build())
+        """
+        self._caps_pipeline._transcriber = TranslationTranscriber(
+            transcriber_type=transcriber_type,
+            model_size=model_size,
+            source_language=source_language,
+            target_language=target_language,
+            translation_provider=translation_provider,
+            deepl_api_key=deepl_api_key,
+            max_line_length=max_line_length,
+            reading_speed=reading_speed,
+            enable_context_translation=enable_context_translation
+        )
+        return self
+    
+    def with_portuguese_translation(
+        self,
+        transcriber_type: str = "faster_whisper",
+        model_size: str = "base", 
+        variant: str = "pt",  # "pt" for European, "pt-BR" for Brazilian
+        translation_provider: str = "deepl",
+        deepl_api_key: Optional[str] = None
+    ) -> "CapsPipelineBuilder":
+        """Convenience method for English-to-Portuguese translation.
+        
+        Configures optimal settings for Portuguese subtitle generation
+        based on the enhanced specification.
+        
+        Args:
+            transcriber_type: "whisper" or "faster_whisper" (recommended for 4x speed)
+            model_size: Whisper model ("base", "medium", "large-v3")
+            variant: "pt" for European Portuguese, "pt-BR" for Brazilian
+            translation_provider: "deepl" (higher quality) or "google" (free)
+            deepl_api_key: DeepL API key (optional)
+            
+        Returns:
+            Self for method chaining
+        """
+        # Configure Portuguese-specific settings
+        max_line_length = 42 if variant == "pt-BR" else 40  # Netflix vs European standards
+        reading_speed = 17 if variant == "pt-BR" else 18    # Brazilian vs European reading speeds
+        
+        return self.with_translation(
+            source_language="en",
+            target_language=variant,
+            transcriber_type=transcriber_type,
+            model_size=model_size,
+            translation_provider=translation_provider,
+            deepl_api_key=deepl_api_key,
+            max_line_length=max_line_length,
+            reading_speed=reading_speed,
+            enable_context_translation=True
+        )
     
     def with_custom_audio_transcriber(self, audio_transcriber: AudioTranscriber) -> "CapsPipelineBuilder":
         self._caps_pipeline._transcriber = audio_transcriber

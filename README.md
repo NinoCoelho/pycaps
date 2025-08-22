@@ -1,6 +1,6 @@
 # pycaps
 
-[![Version](https://img.shields.io/badge/version-0.3.0-green.svg)](https://github.com/francozanardi/pycaps)
+[![Version](https://img.shields.io/badge/version-0.3.1-green.svg)](https://github.com/francozanardi/pycaps)
 [![Status](https://img.shields.io/badge/status-alpha-orange.svg)](https://github.com/francozanardi/pycaps)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python Version](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)](https://www.python.org/downloads/)
@@ -40,6 +40,7 @@ The best choice for **processing longer videos** with **maximum transcription qu
 
 ## Key Features
 
+*   **🌍 English-to-Portuguese Translation** (v0.3.1): Professional-grade translation with DeepL and Google Translate integration, Portuguese-specific optimizations, and comprehensive quality validation.
 *   **🚀 Faster-Whisper Support** (v0.3.0): 4x faster transcription with 40% less memory usage and built-in anti-hallucination measures.
 *   **Template System**: Get started quickly with 14+ predefined templates. Create and share your own templates, packaging styles, animations, and configurations.
 *   **CSS Styling**: Style subtitles using standard CSS. Target specific states like `.word-being-narrated` for dynamic effects, cleanly separating style from logic.
@@ -90,6 +91,12 @@ The fastest way to get started is to use a built-in template.
 # Standard transcription
 pycaps render --input my_video.mp4 --template minimalist
 
+# English-to-Portuguese translation (v0.3.1+)
+pycaps render --input my_video.mp4 --template redpill --translate en-pt-BR --translation-provider google
+
+# Premium translation with DeepL
+pycaps render --input my_video.mp4 --template hype --translate en-pt --translation-provider deepl --deepl-api-key "your-key"
+
 # 4x faster transcription (v0.3.0+)
 pycaps render --input my_video.mp4 --template minimalist --faster-whisper
 
@@ -100,8 +107,9 @@ pycaps render --input my_video.mp4 --template hype --srt-file subtitles.srt
 This command will:
 1.  Load the chosen template (14+ available: minimalist, hype, redpill, fast, etc.).
 2.  Transcribe the audio or import SRT subtitles.
-3.  Apply the template's styles and animations.
-4.  Save the result in a new file.
+3.  Translate to Portuguese (if translation flags are used).
+4.  Apply the template's styles and animations.
+5.  Save the result in a new file.
 
 ### 2. Using the Python Library
 

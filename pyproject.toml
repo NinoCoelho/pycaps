@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pycaps"
-version = "0.3.0"
+version = "0.3.1"
 authors = [
   { name="Franco Zanardi", email="francozanardi97@gmail.com" },
 ]
@@ -45,7 +45,9 @@ dependencies = [
     "tqdm",
     "librosa>=0.10.0",
     "soundfile>=0.12.0",
-    "torch>=1.13.0"
+    "torch>=1.13.0",
+    "deep-translator>=1.11.4",
+    "googletrans==4.0.0rc1"
 ]
 
 [project.scripts]

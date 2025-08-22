@@ -60,6 +60,13 @@ def render(
     transcription_quality: Optional[str] = typer.Option(None, "--transcription-quality", help="Anti-hallucination preset: maximum_quality, balanced, fast_processing, podcasts, short_videos", rich_help_panel="Whisper", show_default=False),
     use_faster_whisper: bool = typer.Option(False, "--faster-whisper", help="Use faster-whisper (4x faster, less hallucinations)", rich_help_panel="Whisper", show_default=False),
 
+    # Translation options
+    translate: Optional[str] = typer.Option(None, "--translate", help="Enable translation from source to target language (e.g., en-pt, en-pt-BR)", rich_help_panel="Translation", show_default=False),
+    translation_provider: Optional[str] = typer.Option("deepl", "--translation-provider", help="Translation service: deepl (higher quality) or google (free)", rich_help_panel="Translation", show_default=False),
+    deepl_api_key: Optional[str] = typer.Option(None, "--deepl-api-key", help="DeepL API key (optional, can use DEEPL_API_KEY env var)", rich_help_panel="Translation", show_default=False),
+    portuguese_variant: Optional[str] = typer.Option("pt", "--portuguese-variant", help="Portuguese variant: pt (European) or pt-BR (Brazilian)", rich_help_panel="Translation", show_default=False),
+    enable_context_translation: bool = typer.Option(True, "--context-translation/--no-context-translation", help="Enable context-aware batch translation", rich_help_panel="Translation", show_default=False),
+
     video_quality: Optional[VideoQuality] = typer.Option(None, "--video-quality", help="Final video quality", rich_help_panel="Video", show_default=False),
 
     preview: bool = typer.Option(False, "--preview", help="Generate a low quality preview of the rendered video", rich_help_panel="Utils"),
@@ -96,8 +103,43 @@ def render(
     if output: builder.with_output_video(output)
     if style: builder.add_css_content(_parse_styles(style))
     
-    # Use faster-whisper if requested
-    if use_faster_whisper:
+    # Handle translation configuration
+    if translate:
+        # Parse translation languages (e.g., "en-pt" or "en-pt-BR")
+        if "-" in translate:
+            source_lang, target_lang = translate.split("-", 1)
+        else:
+            typer.echo("Invalid translation format. Use format like: en-pt or en-pt-BR", err=True)
+            return None
+        
+        # For Portuguese translations, use the convenience method
+        if target_lang.startswith("pt"):
+            typer.echo(f"Configuring English-to-Portuguese translation ({target_lang})...")
+            typer.echo(f"Using {translation_provider} translation service")
+            
+            builder.with_portuguese_translation(
+                transcriber_type="faster_whisper" if use_faster_whisper else "whisper",
+                model_size=whisper_model if whisper_model else "base",
+                variant=target_lang,
+                translation_provider=translation_provider,
+                deepl_api_key=deepl_api_key
+            )
+        else:
+            # Generic translation
+            typer.echo(f"Configuring translation: {source_lang} -> {target_lang}")
+            
+            builder.with_translation(
+                source_language=source_lang,
+                target_language=target_lang,
+                transcriber_type="faster_whisper" if use_faster_whisper else "whisper", 
+                model_size=whisper_model if whisper_model else "base",
+                translation_provider=translation_provider,
+                deepl_api_key=deepl_api_key,
+                enable_context_translation=enable_context_translation
+            )
+    
+    # Regular transcription (only if not using translation)
+    elif use_faster_whisper:
         typer.echo("Using faster-whisper for transcription (4x faster, less hallucinations)...")
         builder.with_faster_whisper(
             model_size=whisper_model if whisper_model else "base",

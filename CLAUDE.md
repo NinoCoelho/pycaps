@@ -10,6 +10,7 @@
 pycaps is a sophisticated Python library for adding dynamic, CSS-styled subtitles to videos. It's designed for creating engaging short-form video content for platforms like TikTok, YouTube Shorts, and Instagram Reels. The project combines AI transcription, advanced text rendering, and powerful animation capabilities.
 
 ### Key Capabilities
+- **English-to-Portuguese Translation (v0.3.1)**: Professional-grade translation with DeepL and Google Translate integration
 - **Faster-Whisper integration (v0.3.0)**: 4x faster transcription with built-in anti-hallucination
 - **Advanced anti-hallucination Whisper transcription** with VAD preprocessing and chunking
 - Automatic speech-to-text transcription with word-level timestamps
@@ -36,13 +37,14 @@ Document → Segment → Line → Word → WordClip
 
 ### Processing Pipeline
 1. **Transcription**: Audio → Text with timestamps *OR* SRT → Document structure
-2. **Segmentation**: Text → Logical segments
-3. **Tagging**: Apply semantic/structural tags
-4. **Selection**: Target specific content
-5. **Styling**: Apply CSS and effects
-6. **Animation**: Add entrance/exit animations
-7. **Rendering**: Generate styled images
-8. **Composition**: Combine with video
+2. **Translation** (Optional): English → Portuguese with quality validation
+3. **Segmentation**: Text → Logical segments
+4. **Tagging**: Apply semantic/structural tags
+5. **Selection**: Target specific content
+6. **Styling**: Apply CSS and effects
+7. **Animation**: Add entrance/exit animations
+8. **Rendering**: Generate styled images
+9. **Composition**: Combine with video
 
 ## Module Structure
 
@@ -100,6 +102,12 @@ pycaps render video.mp4 output.mp4
 # With template
 pycaps render video.mp4 output.mp4 --template hype
 
+# English-to-Portuguese Translation (v0.3.1+)
+pycaps render video.mp4 output.mp4 --translate en-pt-BR --translation-provider google --template redpill
+
+# Portuguese translation with DeepL (premium quality)
+pycaps render video.mp4 output.mp4 --translate en-pt --translation-provider deepl --deepl-api-key "your-key"
+
 # Faster transcription (v0.3.0+) - 4x faster!
 pycaps render video.mp4 output.mp4 --template hype --faster-whisper
 
@@ -125,8 +133,29 @@ from pycaps.transcriber import WhisperAudioTranscriber, FasterWhisperTranscriber
 pipeline = CapsPipeline()
 pipeline.process("input.mp4", "output.mp4")
 
-# With faster-whisper (v0.3.0) - 4x faster!
+# English-to-Portuguese Translation (v0.3.1)
 from pycaps.pipeline import CapsPipelineBuilder
+pipeline = (CapsPipelineBuilder()
+    .with_input_video("english_video.mp4")
+    .with_portuguese_translation(variant="pt-BR", translation_provider="google")
+    .with_output_video("portuguese_subtitles.mp4")
+    .build())
+
+# Advanced Portuguese translation with DeepL
+pipeline = (CapsPipelineBuilder()
+    .with_input_video("input.mp4")
+    .with_translation(
+        source_language="en",
+        target_language="pt-BR",
+        transcriber_type="faster_whisper",
+        translation_provider="deepl",
+        max_line_length=42,
+        reading_speed=17
+    )
+    .with_output_video("output.mp4")
+    .build())
+
+# With faster-whisper (v0.3.0) - 4x faster!
 pipeline = (CapsPipelineBuilder()
     .with_input_video("input.mp4")
     .with_faster_whisper(model_size="base", language="pt")
@@ -283,7 +312,16 @@ logging.basicConfig(level=logging.DEBUG)
 
 ## Project Roadmap
 
-### Current Version: 0.3.0 (Alpha)
+### Current Version: 0.3.1 (Alpha)
+
+### New in v0.3.1
+- **English-to-Portuguese Translation System** with professional-grade quality
+- **DeepL and Google Translate integration** with automatic fallback
+- **Portuguese-specific optimizations** for Brazilian and European variants
+- **Context-aware batch translation** for better accuracy
+- **Translation quality validation** with detailed metrics and scoring
+- **CLI translation support** with `--translate` and `--translation-provider` flags
+- **Pipeline builder integration** with `with_portuguese_translation()` method
 
 ### New in v0.3.0
 - **Faster-Whisper integration** for 4x speed improvement

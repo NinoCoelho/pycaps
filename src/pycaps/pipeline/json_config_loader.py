@@ -42,6 +42,9 @@ class JsonConfigLoader:
 
             self._load_video_config()
             self._load_whisper_config()
+            self._load_faster_whisper_config()
+            self._load_translation_config()
+            self._load_portuguese_translation_config()
             self._load_layout_options()
             self._load_segment_splitters()
             self._load_effects()
@@ -72,6 +75,49 @@ class JsonConfigLoader:
             initial_prompt=whisper_data.initial_prompt,
             portuguese_vocabulary=whisper_data.portuguese_vocabulary,
             anti_hallucination_config=whisper_data.anti_hallucination_preset
+        )
+    
+    def _load_faster_whisper_config(self) -> None:
+        if self._config.faster_whisper is None:
+            return
+        faster_whisper_data = self._config.faster_whisper
+        device = faster_whisper_data.device
+        if device == "auto":
+            device = None  # Let the implementation auto-detect
+        
+        self._builder.with_faster_whisper(
+            model_size=faster_whisper_data.model,
+            language=faster_whisper_data.language,
+            use_vad=faster_whisper_data.use_vad,
+            hallucination_silence_threshold=faster_whisper_data.hallucination_silence_threshold
+        )
+    
+    def _load_translation_config(self) -> None:
+        if self._config.translation is None:
+            return
+        translation_data = self._config.translation
+        self._builder.with_translation(
+            source_language=translation_data.source_language,
+            target_language=translation_data.target_language,
+            transcriber_type=translation_data.transcriber_type,
+            model_size=translation_data.model_size,
+            translation_provider=translation_data.translation_provider,
+            deepl_api_key=translation_data.deepl_api_key,
+            max_line_length=translation_data.max_line_length,
+            reading_speed=translation_data.reading_speed,
+            enable_context_translation=translation_data.enable_context_translation
+        )
+    
+    def _load_portuguese_translation_config(self) -> None:
+        if self._config.portuguese_translation is None:
+            return
+        pt_data = self._config.portuguese_translation
+        self._builder.with_portuguese_translation(
+            transcriber_type=pt_data.transcriber_type,
+            model_size=pt_data.model_size,
+            variant=pt_data.variant,
+            translation_provider=pt_data.translation_provider,
+            deepl_api_key=pt_data.deepl_api_key
         )
 
     def _load_layout_options(self) -> None:
