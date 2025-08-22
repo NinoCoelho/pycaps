@@ -1,6 +1,7 @@
 import time
 import os
 from pycaps.transcriber import AudioTranscriber, WhisperAudioTranscriber, BaseSegmentSplitter
+from pycaps.transcriber.anti_hallucination_config import AntiHallucinationConfig
 from pycaps.renderer import SubtitleRenderer, CssSubtitleRenderer
 from pycaps.video import SubtitleClipsGenerator, VideoGenerator
 from pycaps.layout import WordSizeCalculator, PositionsCalculator, LineSplitter, LayoutUpdater
@@ -20,7 +21,10 @@ from pycaps.bootstrap import check_dependencies
 class CapsPipeline:
     def __init__(self):
         # Configuration attributes (set by builder)
-        self._transcriber: AudioTranscriber = WhisperAudioTranscriber()
+        self._transcriber: AudioTranscriber = WhisperAudioTranscriber(
+            model_size="medium",
+            anti_hallucination_config="balanced"  # Default to balanced anti-hallucination
+        )
         self._renderer: SubtitleRenderer = CssSubtitleRenderer()
         self._semantic_tagger: SemanticTagger = SemanticTagger()
         self._structure_tagger: StructureTagger = StructureTagger()

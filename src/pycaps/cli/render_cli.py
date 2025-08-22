@@ -57,6 +57,8 @@ def render(
     whisper_model: Optional[str] = typer.Option(None, "--whisper-model", help="Whisper model to use, example: --whisper-model=medium", rich_help_panel="Whisper", show_default=False),
     initial_prompt: Optional[str] = typer.Option(None, "--initial-prompt", help="Custom prompt to guide Whisper transcription", rich_help_panel="Whisper", show_default=False),
     portuguese_vocab: list[str] = typer.Option([], "--pt-vocab", help="Additional Portuguese vocabulary terms (can be used multiple times)", rich_help_panel="Whisper"),
+    transcription_quality: Optional[str] = typer.Option(None, "--transcription-quality", help="Anti-hallucination preset: maximum_quality, balanced, fast_processing, podcasts, short_videos", rich_help_panel="Whisper", show_default=False),
+    use_faster_whisper: bool = typer.Option(False, "--faster-whisper", help="Use faster-whisper (4x faster, less hallucinations)", rich_help_panel="Whisper", show_default=False),
 
     video_quality: Optional[VideoQuality] = typer.Option(None, "--video-quality", help="Final video quality", rich_help_panel="Video", show_default=False),
 
@@ -93,13 +95,24 @@ def render(
         
     if output: builder.with_output_video(output)
     if style: builder.add_css_content(_parse_styles(style))
+    
+    # Use faster-whisper if requested
+    if use_faster_whisper:
+        typer.echo("Using faster-whisper for transcription (4x faster, less hallucinations)...")
+        builder.with_faster_whisper(
+            model_size=whisper_model if whisper_model else "base",
+            language=language,
+            use_vad=True,
+            hallucination_silence_threshold=2.0
+        )
     # TODO: this has a little issue (if you set lang via js + whisper model by cli, it will change the lang to None)
-    if language or whisper_model or initial_prompt or portuguese_vocab: 
+    elif language or whisper_model or initial_prompt or portuguese_vocab or transcription_quality: 
         builder.with_whisper_config(
             language=language, 
             model_size=whisper_model if whisper_model else "medium",
             initial_prompt=initial_prompt,
-            portuguese_vocabulary=portuguese_vocab if portuguese_vocab else None
+            portuguese_vocabulary=portuguese_vocab if portuguese_vocab else None,
+            anti_hallucination_config=transcription_quality if transcription_quality else "balanced"
         )
     if subtitle_data: builder.with_subtitle_data_path(subtitle_data)
     if srt_file: 

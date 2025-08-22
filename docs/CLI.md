@@ -24,6 +24,12 @@ The simplest way to run it is with an input video and a template.
 ```bash
 pycaps render --input my_video.mp4 --template default
 ```
+
+For faster transcription (v0.3.0+), use the `--faster-whisper` flag:
+```bash
+pycaps render --input my_video.mp4 --template default --faster-whisper
+```
+
 This will create a new video named `output_... .mp4` in your current directory.
 
 ### Common `render` Options
@@ -43,6 +49,14 @@ This will create a new video named `output_... .mp4` in your current directory.
     ```
 -   `--layout-align <value>`: Change vertical alignment. Options: `top`, `center`, `bottom`.
 -   `--layout-align-offset <value>`: Nudge the vertical alignment. A value from -1.0 (up) to 1.0 (down).
+
+#### Transcription Options
+-   `--faster-whisper`: **(v0.3.0+)** Use faster-whisper for 4x speed improvement and better anti-hallucination.
+-   `--lang <code>`: Set the language for transcription (e.g., `en`, `pt`, `es`, `fr`).
+-   `--whisper-model <size>`: Choose Whisper model size. Options: `tiny`, `base`, `small`, `medium`, `large`, `large-v2`, `large-v3`.
+-   `--transcription-quality <preset>`: Anti-hallucination preset for standard Whisper: `maximum_quality`, `balanced`, `fast_processing`, `podcasts`, `short_videos`.
+-   `--initial-prompt <text>`: Custom prompt to guide Whisper transcription.
+-   `--pt-vocab <term>`: Additional Portuguese vocabulary terms (can be used multiple times).
 
 #### Utilities
 -   `--preview`: Renders a quick, low-quality preview of the first 5 seconds.

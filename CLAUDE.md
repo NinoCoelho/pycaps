@@ -1,15 +1,16 @@
 # pycaps - Claude Context
 
 **Project Type:** Python Library & CLI Tool
-**Primary Technologies:** Python 3.10+, Whisper AI, Playwright, FFmpeg, OpenCV
+**Primary Technologies:** Python 3.10+, Whisper AI, Faster-Whisper, Playwright, FFmpeg, OpenCV
 **Domain:** Video Subtitle Generation with CSS Styling
-**Last Updated:** 2025-08-21
+**Last Updated:** 2025-08-22
 
 ## Project Overview
 
 pycaps is a sophisticated Python library for adding dynamic, CSS-styled subtitles to videos. It's designed for creating engaging short-form video content for platforms like TikTok, YouTube Shorts, and Instagram Reels. The project combines AI transcription, advanced text rendering, and powerful animation capabilities.
 
 ### Key Capabilities
+- **Faster-Whisper integration (v0.3.0)**: 4x faster transcription with built-in anti-hallucination
 - **Advanced anti-hallucination Whisper transcription** with VAD preprocessing and chunking
 - Automatic speech-to-text transcription with word-level timestamps
 - **SRT file import with intelligent word-level timing estimation**
@@ -98,6 +99,9 @@ pycaps render video.mp4 output.mp4
 # With template
 pycaps render video.mp4 output.mp4 --template hype
 
+# Faster transcription (v0.3.0+) - 4x faster!
+pycaps render video.mp4 output.mp4 --template hype --faster-whisper
+
 # Custom configuration
 pycaps render video.mp4 output.mp4 --config config.json
 
@@ -114,11 +118,19 @@ pycaps render podcast.mp4 output.mp4 --transcription-quality podcasts
 ### Python API
 ```python
 from pycaps import CapsPipeline
-from pycaps.transcriber import WhisperAudioTranscriber
+from pycaps.transcriber import WhisperAudioTranscriber, FasterWhisperTranscriber
 
 # Basic usage
 pipeline = CapsPipeline()
 pipeline.process("input.mp4", "output.mp4")
+
+# With faster-whisper (v0.3.0) - 4x faster!
+from pycaps.pipeline import CapsPipelineBuilder
+pipeline = (CapsPipelineBuilder()
+    .with_input_video("input.mp4")
+    .with_faster_whisper(model_size="base", language="pt")
+    .with_output_video("output.mp4")
+    .build())
 
 # With advanced anti-hallucination transcription
 transcriber = WhisperAudioTranscriber(
@@ -252,7 +264,14 @@ logging.basicConfig(level=logging.DEBUG)
 
 ## Project Roadmap
 
-### Current Version: 0.2.0 (Alpha)
+### Current Version: 0.3.0 (Alpha)
+
+### New in v0.3.0
+- **Faster-Whisper integration** for 4x speed improvement
+- **Built-in anti-hallucination** measures in FasterWhisperTranscriber
+- **CLI support** with `--faster-whisper` flag
+- **Pipeline integration** with `with_faster_whisper()` method
+- **Reduced memory usage** (40% lower than standard Whisper)
 
 ### New in v0.2.0
 - **Anti-hallucination transcription system** for long videos (>90s)

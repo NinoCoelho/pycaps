@@ -14,7 +14,10 @@ class VideoConfig(BaseConfigModel):
 
 class WhisperConfig(BaseConfigModel):
     language: Optional[str] = None
-    model: Literal["tiny", "tiny.en", "base", "base.en", "small", "small.en", "medium", "medium.en", "large", "turbo"] = "base"
+    model: Literal["tiny", "tiny.en", "base", "base.en", "small", "small.en", "medium", "medium.en", "large", "large-v2", "large-v3", "turbo"] = "base"
+    initial_prompt: Optional[str] = None
+    portuguese_vocabulary: Optional[list[str]] = None
+    anti_hallucination_preset: Literal["maximum_quality", "balanced", "fast_processing", "podcasts", "short_videos"] = "balanced"
 
 class LimitByWordsSplitterConfig(BaseConfigModel):
     type: Literal["limit_by_words"]

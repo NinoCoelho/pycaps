@@ -44,6 +44,7 @@ The best choice for **processing longer videos** with **maximum transcription qu
 *   **Word Tagging**: Tag words or phrases using regular expressions, word lists, or AI. These tags act as powerful selectors for applying custom CSS, effects, or animations.
 *   **Advanced Animations & Effects**: Bring words to life with a library of built-in animations (fades, pops, slides) and effects (typewriting, emoji insertion, sound effects).
 *   **Whisper-based Transcription**: Automatically generate accurate, word-level timestamps for your videos using OpenAI's Whisper.
+*   **Faster-Whisper Support** (v0.3.0): 4x faster transcription with built-in anti-hallucination measures.
 *   **Dual Interface**: Use it as a simple CLI for quick renders or as a comprehensive Python library for programmatic video creation.
 *   **Offline-First**: The core transcription, styling, and rendering engine runs entirely on your local machine. An internet connection is only needed for optional AI-powered features that require contextual understanding of your script.
 
@@ -87,9 +88,14 @@ The fastest way to get started is to use a built-in template.
 pycaps render --input my_video.mp4 --template minimalist
 ```
 
+For faster transcription (v0.3.0+), use the `--faster-whisper` flag:
+```bash
+pycaps render --input my_video.mp4 --template minimalist --faster-whisper
+```
+
 This command will:
 1.  Load the `minimalist` template.
-2.  Transcribe the audio from `my_video.mp4`.
+2.  Transcribe the audio from `my_video.mp4` (4x faster with `--faster-whisper`).
 3.  Apply the template's styles and animations.
 4.  Save the result in a new file.
 

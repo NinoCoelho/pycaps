@@ -2,6 +2,8 @@ import os
 from .caps_pipeline import CapsPipeline
 from pycaps.layout import SubtitleLayoutOptions, LineSplitter, LayoutUpdater, PositionsCalculator
 from pycaps.transcriber import AudioTranscriber, BaseSegmentSplitter, WhisperAudioTranscriber, PreviewTranscriber, SRTTranscriber
+from pycaps.transcriber.anti_hallucination_config import AntiHallucinationConfig
+from typing import Union
 from typing import Optional, List
 from pycaps.animation import Animation, ElementAnimator
 from pycaps.common import ElementType, EventType, VideoQuality, CacheStrategy
@@ -59,12 +61,83 @@ class CapsPipelineBuilder:
         return self
     
     def with_whisper_config(self, language: Optional[str] = None, model_size: str = "medium", 
-                           initial_prompt: Optional[str] = None, portuguese_vocabulary: Optional[List[str]] = None) -> "CapsPipelineBuilder":
+                           initial_prompt: Optional[str] = None, portuguese_vocabulary: Optional[List[str]] = None,
+                           anti_hallucination_config: Optional[Union[AntiHallucinationConfig, str]] = "balanced") -> "CapsPipelineBuilder":
+        """Configure Whisper transcriber with anti-hallucination features.
+        
+        Args:
+            language: Language code (e.g., "pt", "en") or None for auto-detection
+            model_size: Whisper model size ("tiny", "base", "small", "medium", "large", "large-v2", "large-v3")
+            initial_prompt: Custom prompt for transcription
+            portuguese_vocabulary: List of Portuguese terms for better recognition
+            anti_hallucination_config: Anti-hallucination preset or config object:
+                - "maximum_quality": Best quality, slower processing
+                - "balanced": Good quality with reasonable speed (default)
+                - "fast_processing": Faster processing, basic filtering
+                - "podcasts": Optimized for long-form audio content
+                - "short_videos": Optimized for short-form content
+                - AntiHallucinationConfig object: Custom configuration
+        """
         self._caps_pipeline._transcriber = WhisperAudioTranscriber(
             model_size=model_size, 
             language=language,
             initial_prompt=initial_prompt,
-            portuguese_vocabulary=portuguese_vocabulary
+            portuguese_vocabulary=portuguese_vocabulary,
+            anti_hallucination_config=anti_hallucination_config
+        )
+        return self
+    
+    def with_anti_hallucination_preset(self, preset: str) -> "CapsPipelineBuilder":
+        """Set anti-hallucination preset for the current transcriber.
+        
+        Args:
+            preset: One of "maximum_quality", "balanced", "fast_processing", "podcasts", "short_videos"
+        """
+        if isinstance(self._caps_pipeline._transcriber, WhisperAudioTranscriber):
+            # Update existing transcriber with new preset
+            current = self._caps_pipeline._transcriber
+            self._caps_pipeline._transcriber = WhisperAudioTranscriber(
+                model_size=current._model_size,
+                language=current._language,
+                initial_prompt=current._initial_prompt,
+                portuguese_vocabulary=current._portuguese_vocabulary,
+                anti_hallucination_config=preset
+            )
+        else:
+            # Create new WhisperAudioTranscriber with preset
+            self._caps_pipeline._transcriber = WhisperAudioTranscriber(
+                anti_hallucination_config=preset
+            )
+        return self
+    
+    def with_faster_whisper(
+        self,
+        model_size: str = "base",
+        language: str = None,
+        use_vad: bool = True,
+        hallucination_silence_threshold: float = 2.0
+    ) -> "CapsPipelineBuilder":
+        """Use faster-whisper for transcription (4x faster, less hallucinations).
+        
+        Args:
+            model_size: Model size (tiny, base, small, medium, large-v2, large-v3)
+            language: Language code (e.g., 'en', 'pt')
+            use_vad: Enable Voice Activity Detection
+            hallucination_silence_threshold: Skip silence longer than threshold
+        
+        Returns:
+            Self for method chaining
+        """
+        from ..transcriber.faster_whisper_transcriber import FasterWhisperTranscriber
+        
+        self._caps_pipeline._transcriber = FasterWhisperTranscriber(
+            model_size=model_size,
+            language=language,
+            use_vad=use_vad,
+            hallucination_silence_threshold=hallucination_silence_threshold,
+            condition_on_previous_text=False,  # Disable to prevent hallucinations
+            temperature=0.0,  # Deterministic
+            repetition_penalty=1.1  # Penalize repetitions
         )
         return self
     
