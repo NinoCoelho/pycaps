@@ -1,16 +1,17 @@
 # Transcriber Module - Claude Context
 
 **Module Type:** Audio Transcription & Subtitle Import Processing
-**Primary Technologies:** OpenAI Whisper, Google Speech API, Audio Processing
-**Dependencies:** torch, librosa, pydub, google-cloud-speech, webvtt
-**Last Updated:** 2025-08-21
+**Primary Technologies:** OpenAI Whisper, Faster-Whisper, Google Speech API, Audio Processing
+**Dependencies:** torch, librosa, pydub, google-cloud-speech, webvtt, faster-whisper
+**Last Updated:** 2025-08-22
 
 ## Module Overview
 
 The Transcriber module handles speech-to-text conversion and subtitle file import with word-level timestamps, providing the foundation for all subtitle generation in pycaps. It supports multiple transcription backends, SRT file import with intelligent timing estimation, intelligent audio preprocessing, and sophisticated text segmentation strategies. The module is designed for high accuracy and performance with extensive customization options.
 
 ### Core Capabilities
-- Multi-provider transcription (Whisper, Google Speech, custom providers)
+- Multi-provider transcription (Whisper, Faster-Whisper, Google Speech, custom providers)
+- **Faster-Whisper integration (v0.3.0)** - 4x speed improvement with built-in anti-hallucination
 - **SRT file import with intelligent word-level timing estimation**
 - Word-level timestamp extraction with high precision
 - Intelligent audio preprocessing and enhancement
@@ -31,6 +32,7 @@ Segmentation → Validation → Transcription Output
 ```
 BaseTranscriber
 ├── WhisperTranscriber (primary)
+├── FasterWhisperTranscriber (v0.3.0 - optimized)
 ├── GoogleSpeechTranscriber
 ├── AzureSpeechTranscriber
 ├── SRTTranscriber (subtitle import)
@@ -140,7 +142,40 @@ class WhisperAudioTranscriber(AudioTranscriber):
 }
 ```
 
-### 3. Google Speech Transcriber (`google_speech_transcriber.py`)
+### 3. Faster-Whisper Transcriber (`faster_whisper_transcriber.py`)
+
+**Purpose**: Optimized Whisper implementation using CTranslate2 for 4x faster transcription (v0.3.0)
+**Key Features**:
+- **4x faster transcription** compared to OpenAI Whisper
+- **Built-in VAD support** for better silence handling
+- **Reduced memory usage** (40% lower than standard Whisper)
+- **Built-in anti-hallucination** measures
+- **Batch processing** for improved throughput
+- **Better handling of silence** and non-speech segments
+
+```python
+class FasterWhisperTranscriber(AudioTranscriber):
+    def __init__(
+        self,
+        model_size: str = "base",
+        device: str = "cpu",
+        compute_type: str = "default",
+        language: Optional[str] = None,
+        use_vad: bool = True,
+        vad_threshold: float = 0.5,
+        condition_on_previous_text: bool = False,  # Disable to prevent hallucinations
+        temperature: float = 0.0,  # Deterministic output
+        repetition_penalty: float = 1.1  # Penalize repetitions
+    ):
+        """Initialize faster-whisper with anti-hallucination settings."""
+```
+
+**Performance Comparison**:
+- **Whisper base**: ~16x realtime → **Faster-Whisper base**: ~64x realtime
+- **Whisper medium**: ~2x realtime → **Faster-Whisper medium**: ~8x realtime
+- **Memory usage**: 40% reduction compared to standard Whisper
+
+### 4. Google Speech Transcriber (`google_speech_transcriber.py`)
 
 **Purpose**: Google Cloud Speech-to-Text integration
 **Key Features**:
@@ -171,7 +206,7 @@ class GoogleSpeechTranscriber(BaseTranscriber):
         return self._process_google_result(response)
 ```
 
-### 4. SRT Transcriber (`srt_transcriber.py`)
+### 5. SRT Transcriber (`srt_transcriber.py`)
 
 **Purpose**: SRT subtitle file import with intelligent word-level timing estimation
 **Key Features**:
@@ -206,7 +241,7 @@ The SRT transcriber estimates individual word timings using:
 - Proportional time distribution within segment duration
 - Natural speech pattern considerations
 
-### 5. SRT Loader (`srt_loader.py`)
+### 6. SRT Loader (`srt_loader.py`)
 
 **Purpose**: Robust SRT file parsing and validation utility
 **Key Features**:
@@ -223,7 +258,7 @@ class SRTLoader:
         return parsed_entries
 ```
 
-### 6. Audio Preprocessing (`audio_processor.py`)
+### 7. Audio Preprocessing (`audio_processor.py`)
 
 **Purpose**: Enhance audio quality for better transcription accuracy
 **Processing Steps**:
@@ -274,7 +309,7 @@ class SRTLoader:
        return merge_close_segments(segments)
    ```
 
-### 7. Segmentation Strategies (`splitter/`)
+### 8. Segmentation Strategies (`splitter/`)
 
 **Purpose**: Intelligent text segmentation for natural subtitle grouping
 
@@ -350,7 +385,7 @@ class SmartSplitter(BaseSegmentSplitter):
         return self._select_best_segmentation(candidates)
 ```
 
-### 8. Interactive Editor (`editor/`)
+### 9. Interactive Editor (`editor/`)
 
 **Purpose**: GUI for manual transcription correction and timing adjustment
 
@@ -382,7 +417,7 @@ class TranscriptionEditor:
         pass
 ```
 
-### 9. Transcription Result (`transcription_result.py`)
+### 10. Transcription Result (`transcription_result.py`)
 
 **Purpose**: Standardized output format for all transcription providers
 
@@ -669,6 +704,7 @@ class CustomTranscriber(BaseTranscriber):
 ### Core Classes
 - **`BaseTranscriber`** - Abstract transcription interface
 - **`WhisperTranscriber`** - Whisper implementation
+- **`FasterWhisperTranscriber`** - Optimized Whisper (v0.3.0) with 4x speed improvement
 - **`GoogleSpeechTranscriber`** - Google Speech implementation
 - **`SRTTranscriber`** - SRT file import with intelligent timing
 - **`SRTLoader`** - SRT file parsing and validation utility
@@ -682,4 +718,4 @@ class CustomTranscriber(BaseTranscriber):
 - **`detect_language(audio)`** - Automatic language detection
 
 ---
-*Transcriber Module | Speech-to-text | Word-level timestamps | Multi-provider support*
+*Transcriber Module v0.3.0 | Speech-to-text | Faster-Whisper integration | Word-level timestamps | Multi-provider support*

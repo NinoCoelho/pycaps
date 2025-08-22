@@ -3,7 +3,7 @@
 **Module Type:** Core Processing Orchestration
 **Primary Technologies:** Python, Pydantic, Multiprocessing, JSON Configuration
 **Dependencies:** All pycaps modules (transcriber, renderer, animation, etc.)
-**Last Updated:** 2025-08-19
+**Last Updated:** 2025-08-22
 
 ## Module Overview
 
@@ -70,12 +70,24 @@ pipeline = (builder
 
 **Configuration Categories**:
 - **Transcriber Settings** - Model selection, language, quality
+- **Faster-Whisper Settings** (v0.3.0) - Optimized transcription with 4x speed
 - **SRT Import** - Subtitle file import with intelligent timing
 - **Template Configuration** - Styling templates and overrides
 - **Effect Chains** - Text and clip effects to apply
 - **Animation Sequences** - Entrance/exit animations
 - **Rendering Options** - Quality, caching, performance
 - **Output Settings** - Format, resolution, codec
+
+**New Builder Methods (v0.3.0)**:
+```python
+# Use Faster-Whisper for 4x faster transcription
+builder.with_faster_whisper(
+    model_size="base",
+    device="cpu",
+    compute_type="default",
+    language="auto"
+)
+```
 
 ### 3. JSON Configuration Loader (`json_config_loader.py`)
 

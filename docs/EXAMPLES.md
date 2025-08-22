@@ -128,7 +128,67 @@ These technologies will change everything.
 - **Full Styling**: All pycaps templates and effects still apply
 
 ---
-## Example 4: Advanced JSON with Tagger and Effects
+## Example 4: Faster-Whisper Transcription (v0.3.0)
+
+This example shows how to use the new Faster-Whisper integration for 4x faster transcription with better anti-hallucination capabilities.
+
+**`faster_transcription.py`**
+```python
+from pycaps.pipeline import CapsPipelineBuilder
+
+# Method 1: Using pipeline builder with faster-whisper
+builder = CapsPipelineBuilder()
+pipeline = (builder
+    .with_input_video("my_video.mp4")
+    .with_output_video("output.mp4")
+    .with_faster_whisper(
+        model_size="base",         # Options: tiny, base, small, medium, large, large-v2
+        device="cpu",              # Use "cuda" for GPU acceleration
+        language="auto",           # Auto-detect or specify: en, pt, es, etc.
+        use_vad=True              # Enable Voice Activity Detection
+    )
+    .with_template("hype")
+    .build())
+
+pipeline.run()
+print("Video rendered with Faster-Whisper!")
+
+# Method 2: Direct instantiation
+from pycaps import CapsPipeline
+from pycaps.transcriber import FasterWhisperTranscriber
+
+transcriber = FasterWhisperTranscriber(
+    model_size="medium",
+    device="cuda" if torch.cuda.is_available() else "cpu",
+    language="pt",  # Portuguese
+    use_vad=True,
+    vad_threshold=0.5,
+    condition_on_previous_text=False,  # Prevent hallucinations
+    repetition_penalty=1.1
+)
+
+pipeline = CapsPipeline(transcriber=transcriber)
+pipeline.process("input.mp4", "output.mp4")
+```
+
+**Benefits of Faster-Whisper:**
+- **4x Speed Improvement**: Base model runs at ~64x realtime vs Whisper's ~16x
+- **40% Less Memory**: More efficient memory usage
+- **Built-in VAD**: Better silence handling
+- **Reduced Hallucinations**: Built-in anti-hallucination measures
+- **GPU Support**: CUDA acceleration available
+
+**CLI Usage:**
+```bash
+# Use faster-whisper with CLI
+pycaps render --input video.mp4 --output result.mp4 --faster-whisper --template hype
+
+# With custom model size
+pycaps render --input video.mp4 --faster-whisper --whisper-model medium --template modern
+```
+
+---
+## Example 5: Advanced JSON with Tagger and Effects
 
 This example demonstrates a more complex setup using a JSON file. It uses a wordlist to tag specific words and applies a sound effect to them.
 
@@ -185,7 +245,7 @@ pycaps render --input video.mp4 --template my_template
 ```
 
 ---
-## Example 5: Advanced Python Script with Custom Logic
+## Example 6: Advanced Python Script with Custom Logic
 
 This script showcases the full power of the Python library. It defines a complex pipeline with multiple animations, conditional effects, and custom taggers.
 

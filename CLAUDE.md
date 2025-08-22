@@ -75,12 +75,13 @@ pip install pycaps
 
 ### Dependencies
 - **Core**: Python 3.10+, setuptools
-- **Transcription**: openai-whisper, google-cloud-speech, librosa, soundfile, torch
+- **Transcription**: openai-whisper, faster-whisper>=1.2.0, google-cloud-speech, librosa, soundfile, torch
 - **Anti-hallucination**: silero-vad (via torch.hub), numpy
 - **Rendering**: playwright, pillow
-- **Video**: opencv-python, ffmpeg-python, pydub
+- **Video**: opencv-python, ffmpeg-python, pydub>=0.25.1
 - **CLI**: typer, rich
 - **Data**: pydantic, numpy
+- **Additional**: multiprocess, tqdm, requests, pywebview, audioop-lts (Python 3.13+)
 
 ### Environment Variables
 - `PYCAPS_AI_ENABLED` - Enable/disable AI functionality (optional, defaults to "true", set to "false"/"0"/"no"/"off" to disable)
@@ -181,6 +182,24 @@ pip install pytest pytest-cov pytest-asyncio
 # Run tests (when implemented)
 pytest tests/
 ```
+
+## Available Templates
+
+### Built-in Templates (14 total)
+- **hype** - High-energy animated subtitles
+- **redpill** - Red pill-shaped subtitle styling with drop shadows
+- **fast** - Quick rendering with minimal effects
+- **minimal** - Clean, simple subtitles
+- **bold** - Strong, impactful text
+- **neon** - Glowing neon effect
+- **retro** - Vintage aesthetic
+- **modern** - Contemporary design
+- **comic** - Comic book style
+- **gradient** - Color gradient effects
+- **shadow** - Drop shadow emphasis
+- **outline** - Text with outlines
+- **glow** - Soft glowing text
+- **wave** - Animated wave effects
 
 ## Common Development Tasks
 
@@ -309,4 +328,4 @@ logging.basicConfig(level=logging.DEBUG)
 5. Submit PR with clear description
 
 ---
-*pycaps v0.2.0 | CSS-styled video subtitles | Anti-hallucination AI transcription | Modular architecture*
+*pycaps v0.3.0 | CSS-styled video subtitles | Faster-Whisper integration | Anti-hallucination AI transcription | Modular architecture*

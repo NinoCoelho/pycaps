@@ -1,5 +1,6 @@
 # pycaps
 
+[![Version](https://img.shields.io/badge/version-0.3.0-green.svg)](https://github.com/francozanardi/pycaps)
 [![Status](https://img.shields.io/badge/status-alpha-orange.svg)](https://github.com/francozanardi/pycaps)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python Version](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)](https://www.python.org/downloads/)
@@ -39,14 +40,15 @@ The best choice for **processing longer videos** with **maximum transcription qu
 
 ## Key Features
 
-*   **Template System**: Get started quickly with predefined templates. Create and share your own templates, packaging styles, animations, and configurations.
+*   **🚀 Faster-Whisper Support** (v0.3.0): 4x faster transcription with 40% less memory usage and built-in anti-hallucination measures.
+*   **Template System**: Get started quickly with 14+ predefined templates. Create and share your own templates, packaging styles, animations, and configurations.
 *   **CSS Styling**: Style subtitles using standard CSS. Target specific states like `.word-being-narrated` for dynamic effects, cleanly separating style from logic.
 *   **Word Tagging**: Tag words or phrases using regular expressions, word lists, or AI. These tags act as powerful selectors for applying custom CSS, effects, or animations.
 *   **Advanced Animations & Effects**: Bring words to life with a library of built-in animations (fades, pops, slides) and effects (typewriting, emoji insertion, sound effects).
-*   **Whisper-based Transcription**: Automatically generate accurate, word-level timestamps for your videos using OpenAI's Whisper.
-*   **Faster-Whisper Support** (v0.3.0): 4x faster transcription with built-in anti-hallucination measures.
+*   **Anti-Hallucination System** (v0.2.0+): Advanced transcription with VAD preprocessing and smart chunking for long videos.
+*   **SRT Import**: Skip transcription entirely by importing existing SRT subtitle files with intelligent word-level timing estimation.
 *   **Dual Interface**: Use it as a simple CLI for quick renders or as a comprehensive Python library for programmatic video creation.
-*   **Offline-First**: The core transcription, styling, and rendering engine runs entirely on your local machine. An internet connection is only needed for optional AI-powered features that require contextual understanding of your script.
+*   **Offline-First**: The core transcription, styling, and rendering engine runs entirely on your local machine. An internet connection is only needed for optional AI-powered features.
 
 ## Prerequisites
 
@@ -74,7 +76,7 @@ pycaps is currently in a very alpha stage and is not yet available on PyPI. You 
     playwright install chromium
     ```
 
-> ⚠️ **Note**: The first time you use `pycaps`, it will also download a Whisper AI model for transcription. This may take a few minutes and only happens once.
+> ⚠️ **Note**: The first time you use `pycaps`, it will download the transcription model (Whisper or Faster-Whisper). This may take a few minutes and only happens once.
 
 ## Quick Start
 
@@ -85,17 +87,19 @@ There are two primary ways to use pycaps: via the command line with a template o
 The fastest way to get started is to use a built-in template.
 
 ```bash
+# Standard transcription
 pycaps render --input my_video.mp4 --template minimalist
-```
 
-For faster transcription (v0.3.0+), use the `--faster-whisper` flag:
-```bash
+# 4x faster transcription (v0.3.0+)
 pycaps render --input my_video.mp4 --template minimalist --faster-whisper
+
+# Use existing subtitles (skip transcription)
+pycaps render --input my_video.mp4 --template hype --srt-file subtitles.srt
 ```
 
 This command will:
-1.  Load the `minimalist` template.
-2.  Transcribe the audio from `my_video.mp4` (4x faster with `--faster-whisper`).
+1.  Load the chosen template (14+ available: minimalist, hype, redpill, fast, etc.).
+2.  Transcribe the audio or import SRT subtitles.
 3.  Apply the template's styles and animations.
 4.  Save the result in a new file.
 
@@ -106,14 +110,24 @@ For full control, use the `CapsPipelineBuilder` in your Python code.
 ```python
 from pycaps import CapsPipelineBuilder
 
-# The pipeline contains multiples stages to render the final video
+# Standard pipeline
 pipeline = (
     CapsPipelineBuilder()
     .with_input_video("input.mp4")
     .add_css("css_file.css")
     .build()
 )
-pipeline.run() # When this is executed, it starts to render the video
+pipeline.run()
+
+# Using Faster-Whisper for 4x speed (v0.3.0+)
+pipeline = (
+    CapsPipelineBuilder()
+    .with_input_video("input.mp4")
+    .with_faster_whisper(model_size="base", language="auto")
+    .with_template("hype")
+    .build()
+)
+pipeline.run()
 ```
 
 You can also preload the builder using a Template.
@@ -134,6 +148,50 @@ builder.add_animation(
 pipeline = builder.build()
 pipeline.run()
 ```
+
+## Performance & Transcription Options
+
+### 🚀 Faster-Whisper (v0.3.0+)
+For production use, we recommend using Faster-Whisper for significantly improved performance:
+
+| Model | Standard Whisper | Faster-Whisper | Speed Improvement |
+|-------|-----------------|----------------|-------------------|
+| tiny  | ~32x realtime   | ~128x realtime | **4x faster**     |
+| base  | ~16x realtime   | ~64x realtime  | **4x faster**     |
+| small | ~6x realtime    | ~24x realtime  | **4x faster**     |
+| medium| ~2x realtime    | ~8x realtime   | **4x faster**     |
+
+**Additional benefits:**
+- 40% less memory usage
+- Built-in VAD (Voice Activity Detection)
+- Better handling of silence and non-speech
+- Reduced hallucinations on long videos
+
+### Anti-Hallucination System (v0.2.0+)
+For videos longer than 90 seconds, pycaps includes advanced anti-hallucination features:
+- VAD preprocessing to detect speech segments
+- Smart chunking with overlapping segments
+- Compression ratio and semantic similarity filtering
+- Preset configurations: `maximum_quality`, `balanced`, `podcasts`, `short_videos`
+
+## Available Templates
+
+pycaps includes 14+ built-in templates to get you started quickly:
+
+- **minimalist** - Clean, simple subtitles
+- **hype** - High-energy animated subtitles
+- **redpill** - Red pill-shaped styling with drop shadows
+- **fast** - Quick rendering with minimal effects
+- **bold** - Strong, impactful text
+- **neon** - Glowing neon effect
+- **retro** - Vintage aesthetic
+- **modern** - Contemporary design
+- **comic** - Comic book style
+- **gradient** - Color gradient effects
+- **shadow** - Drop shadow emphasis
+- **outline** - Text with outlines
+- **glow** - Soft glowing text
+- **wave** - Animated wave effects
 
 ## What's Next?
 
