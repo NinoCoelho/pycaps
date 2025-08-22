@@ -718,4 +718,4 @@ class CustomTranscriber(BaseTranscriber):
 - **`detect_language(audio)`** - Automatic language detection
 
 ---
-*Transcriber Module v0.3.0 | Speech-to-text | Faster-Whisper integration | Word-level timestamps | Multi-provider support*
+*Transcriber Module v0.3.1 | Speech-to-text | English-to-Portuguese translation | Faster-Whisper integration | Multi-provider support*

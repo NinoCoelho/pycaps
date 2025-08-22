@@ -21,7 +21,7 @@ def get_version():
             if tomllib:
                 with open(pyproject_path, "rb") as f:
                     data = tomllib.load(f)
-                    return data.get("project", {}).get("version", "0.3.0")
+                    return data.get("project", {}).get("version", "0.3.1")
             else:
                 # Fallback for older Python versions
                 with open(pyproject_path, "r") as f:
@@ -33,7 +33,7 @@ def get_version():
         import importlib.metadata
         return importlib.metadata.version("pycaps")
     except:
-        return "0.3.0"  # Fallback version
+        return "0.3.1"  # Fallback version
 
 app = typer.Typer(
     help="Pycaps, a tool for adding CSS-styled subtitles to videos",

@@ -366,4 +366,4 @@ logging.basicConfig(level=logging.DEBUG)
 5. Submit PR with clear description
 
 ---
-*pycaps v0.3.0 | CSS-styled video subtitles | Faster-Whisper integration | Anti-hallucination AI transcription | Modular architecture*
+*pycaps v0.3.1 | CSS-styled video subtitles | English-to-Portuguese translation | Faster-Whisper integration | Anti-hallucination AI transcription*
