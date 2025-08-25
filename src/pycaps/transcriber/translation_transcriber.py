@@ -107,9 +107,26 @@ class TranslationTranscriber(AudioTranscriber):
                     use_vad=True  # Better silence handling
                 )
             else:
+                # Create a minimal config that disables filtering for translation
+                from .anti_hallucination_config import AntiHallucinationConfig
+                no_filter_config = AntiHallucinationConfig(
+                    enable_vad=False,
+                    chunk_length=0,  # Disable chunking
+                    overlap=0,
+                    adaptive_thresholds=False,
+                    compression_ratio_threshold=999.0,  # Disable compression filter
+                    semantic_similarity_threshold=0.0,  # Disable semantic filter
+                    max_consecutive_repetitions=999,  # Disable repetition filter
+                    enable_compression_filter=False,
+                    enable_semantic_filter=False,
+                    enable_repetition_filter=False
+                )
+                
                 self._speech_transcriber = WhisperAudioTranscriber(
                     model_size=self.model_size,
-                    language=self.source_language
+                    language=self.source_language,
+                    # Use minimal config that disables all filtering
+                    anti_hallucination_config=no_filter_config
                 )
             
             logger.info(f"Initialized {self.transcriber_type} transcriber with model {self.model_size}")
@@ -172,13 +189,13 @@ class TranslationTranscriber(AudioTranscriber):
         for segment in original_document._segments:
             # Get segment text
             segment_text = self._extract_segment_text(segment)
-            if segment_text.strip():
-                segments_to_translate.append({
-                    'segment': segment,
-                    'text': segment_text,
-                    'start_time': segment.time.start,
-                    'end_time': segment.time.end
-                })
+            # Include ALL segments, even empty ones to preserve timing
+            segments_to_translate.append({
+                'segment': segment,
+                'text': segment_text,
+                'start_time': segment.time.start,
+                'end_time': segment.time.end
+            })
         
         logger.info(f"Extracted {len(segments_to_translate)} segments for translation")
         
@@ -233,46 +250,60 @@ class TranslationTranscriber(AudioTranscriber):
         
         for i in range(0, len(segments_to_translate), self.batch_size):
             batch = segments_to_translate[i:i + self.batch_size]
-            texts_to_translate = [seg['text'] for seg in batch]
+            
+            # Separate empty and non-empty segments
+            non_empty_indices = []
+            texts_to_translate = []
+            
+            for j, seg in enumerate(batch):
+                if seg['text'] and seg['text'].strip():
+                    non_empty_indices.append(j)
+                    texts_to_translate.append(seg['text'])
             
             try:
-                translated_texts = translation_service.translate_batch(
-                    texts_to_translate,
-                    self.source_language,
-                    self.target_language
-                )
+                # Translate only non-empty segments
+                if texts_to_translate:
+                    translated_texts = translation_service.translate_batch(
+                        texts_to_translate,
+                        self.source_language,
+                        self.target_language
+                    )
+                else:
+                    translated_texts = []
                 
-                # Combine translations with original segments
-                # Ensure we have exactly the same number of translations as batch items
-                if len(translated_texts) != len(batch):
-                    logger.warning(f"Mismatch between batch size ({len(batch)}) and translations ({len(translated_texts)})")
-                
-                for j, translated_text in enumerate(translated_texts):
-                    if j < len(batch):  # Safety check
-                        segment_info = batch[j].copy()
-                        segment_info['translated_text'] = translated_text
-                        translated_segments.append(segment_info)
+                # Reconstruct full batch with translations
+                translation_index = 0
+                for j, segment_info in enumerate(batch):
+                    segment_copy = segment_info.copy()
+                    
+                    if j in non_empty_indices and translation_index < len(translated_texts):
+                        # Use translation for non-empty segments
+                        segment_copy['translated_text'] = translated_texts[translation_index]
+                        translation_index += 1
                     else:
-                        logger.error(f"Translation index {j} exceeds batch size {len(batch)}")
+                        # Keep original text for empty segments or if translation missing
+                        segment_copy['translated_text'] = segment_info['text']
+                    
+                    translated_segments.append(segment_copy)
                 
                 # Handle case where we got fewer translations than expected
-                for j in range(len(translated_texts), len(batch)):
-                    logger.warning(f"Missing translation for batch item {j}, using original text")
-                    segment_info = batch[j].copy()
-                    segment_info['translated_text'] = segment_info['text']  # Keep original
-                    translated_segments.append(segment_info)
+                if len(translated_texts) != len(non_empty_indices):
+                    logger.warning(f"Expected {len(non_empty_indices)} translations, got {len(translated_texts)}")
                 
             except TranslationError as e:
                 logger.error(f"Batch translation failed: {e}")
-                # Fallback to individual translation
+                # Fallback to individual translation for this batch
                 for segment_info in batch:
                     try:
-                        translated_text = translation_service.translate(
-                            segment_info['text'],
-                            self.source_language,
-                            self.target_language
-                        )
-                        segment_info['translated_text'] = translated_text
+                        if segment_info['text'] and segment_info['text'].strip():
+                            translated_text = translation_service.translate(
+                                segment_info['text'],
+                                self.source_language,
+                                self.target_language
+                            )
+                            segment_info['translated_text'] = translated_text
+                        else:
+                            segment_info['translated_text'] = segment_info['text']
                         translated_segments.append(segment_info)
                     except TranslationError:
                         # Keep original text as fallback
@@ -292,6 +323,12 @@ class TranslationTranscriber(AudioTranscriber):
         
         for segment_info in segments_to_translate:
             try:
+                # Handle empty/whitespace-only segments
+                if not segment_info['text'] or not segment_info['text'].strip():
+                    segment_info['translated_text'] = segment_info['text']
+                    translated_segments.append(segment_info)
+                    continue
+                
                 translated_text = translation_service.translate(
                     segment_info['text'],
                     self.source_language,

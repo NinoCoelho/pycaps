@@ -73,6 +73,7 @@ class WhisperAudioTranscriber(AudioTranscriber):
         
         # If config is provided as object
         elif isinstance(config, AntiHallucinationConfig):
+            self._custom_config_provided = True
             return config
         
         # If no config provided, but legacy parameters are given
@@ -339,7 +340,7 @@ class WhisperAudioTranscriber(AudioTranscriber):
             duration = librosa.get_duration(path=audio_path)
             
             # Use duration-based configuration if no specific config was provided
-            if not hasattr(self, '_duration_config_applied'):
+            if not hasattr(self, '_duration_config_applied') and not hasattr(self, '_custom_config_provided'):
                 self._config = AntiHallucinationConfig.get_duration_based_config(duration)
                 self._duration_config_applied = True
                 logger().info(f"Using duration-based anti-hallucination config for {duration:.1f}s video")
