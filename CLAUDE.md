@@ -312,7 +312,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 ## Project Roadmap
 
-### Current Version: 0.3.1 (Alpha)
+### Current Version: 0.3.3 (Alpha)
 
 ### New in v0.3.1
 - **English-to-Portuguese Translation System** with professional-grade quality
@@ -366,4 +366,4 @@ logging.basicConfig(level=logging.DEBUG)
 5. Submit PR with clear description
 
 ---
-*pycaps v0.3.1 | CSS-styled video subtitles | English-to-Portuguese translation | Faster-Whisper integration | Anti-hallucination AI transcription*
+*pycaps v0.3.3 | CSS-styled video subtitles | English-to-Portuguese translation | Faster-Whisper integration | Anti-hallucination AI transcription*
