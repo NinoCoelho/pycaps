@@ -312,7 +312,12 @@ logging.basicConfig(level=logging.DEBUG)
 
 ## Project Roadmap
 
-### Current Version: 0.3.3 (Alpha)
+### Current Version: 0.3.4 (Alpha)
+
+### New in v0.3.4
+- **Proportional Font Sizing for Redpill Template** - Font size now scales automatically with video canvas dimensions
+- **Responsive Template Design** - All visual elements (padding, shadows, borders) scale proportionally using viewport units (vw)
+- **Resolution Independent Rendering** - Consistent visual appearance across any video resolution from mobile to 4K
 
 ### New in v0.3.1
 - **English-to-Portuguese Translation System** with professional-grade quality
@@ -366,4 +371,4 @@ logging.basicConfig(level=logging.DEBUG)
 5. Submit PR with clear description
 
 ---
-*pycaps v0.3.3 | CSS-styled video subtitles | English-to-Portuguese translation | Faster-Whisper integration | Anti-hallucination AI transcription*
+*pycaps v0.3.4 | CSS-styled video subtitles | Proportional responsive templates | English-to-Portuguese translation | Faster-Whisper integration | Anti-hallucination AI transcription*
