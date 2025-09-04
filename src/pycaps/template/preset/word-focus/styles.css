@@ -5,7 +5,7 @@
 
 .word {
     font-family: CustomFont, sans-serif;
-    font-size: 24px;
+    font-size: 3.5vw;
     color: white;
     padding: 4px 4px;
     text-shadow: 
@@ -19,4 +19,71 @@
 .word-being-narrated {
     background-color: #f76f00;
     border-radius: 5%;
+}
+
+/* AI Word Highlighting Styles for Word-Focus Template */
+.word.highlight.word-being-narrated {
+    font-size: 4.5vw !important;
+    color: #FFFFFF !important;  /* Pure white for maximum contrast */
+    background-color: #FF0000 !important;  /* Bright red for highlights */
+    font-weight: bold !important;
+    border-radius: 8% !important;
+    text-shadow: 
+        0 0 15px #FF0000,
+        -2px -2px 2px #000,
+        2px -2px 2px #000,
+        -2px 2px 2px #000,
+        2px 2px 2px #000 !important;
+    animation: word-focus-highlight 1.3s ease-in-out infinite;
+    transform: scale(1.1);
+}
+
+.word.emphasis.word-being-narrated {
+    font-size: 4.2vw !important;
+    color: #FFFFFF !important;
+    background-color: #FF8C00 !important;  /* Dark orange for emphasis */
+    font-weight: bold !important;
+    border-radius: 7% !important;
+    text-shadow: 
+        0 0 12px #FF8C00,
+        -2px -2px 2px #000,
+        2px -2px 2px #000,
+        -2px 2px 2px #000,
+        2px 2px 2px #000 !important;
+    transform: scale(1.05);
+}
+
+/* Also style highlighted words in other states */
+.word.highlight.word-not-narrated-yet,
+.word.highlight.word-already-narrated {
+    font-size: 4.2vw !important;
+    color: #FFFFFF !important;
+    background-color: #CC5500 !important;  /* Darker red-orange for non-current highlights */
+    font-weight: bold !important;
+    border-radius: 6% !important;
+}
+
+.word.emphasis.word-not-narrated-yet,
+.word.emphasis.word-already-narrated {
+    font-size: 4vw !important;
+    color: #FFFFFF !important;
+    background-color: #B8860B !important;  /* Dark goldenrod for non-current emphasis */
+    font-weight: bold !important;
+    border-radius: 5% !important;
+}
+
+/* Word-focus highlight animation */
+@keyframes word-focus-highlight {
+    0% { 
+        transform: scale(1.1) rotate(0deg);
+        border-radius: 8%;
+    }
+    50% { 
+        transform: scale(1.15) rotate(2deg);
+        border-radius: 12%;
+    }
+    100% { 
+        transform: scale(1.1) rotate(0deg);
+        border-radius: 8%;
+    }
 }

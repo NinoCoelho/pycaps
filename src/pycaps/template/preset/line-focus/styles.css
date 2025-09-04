@@ -5,7 +5,7 @@
 
 .word {
     font-family: CustomFont, sans-serif;
-    font-size: 20px;
+    font-size: 3.5vw;
     color: white;
     padding: 4px 4px;
     text-shadow: 
@@ -18,7 +18,7 @@
 
 .line-being-narrated > .word {
     background-color: blue;
-    font-size: 30px;
+    font-size: 4.5vw;
 }
 
 .line-being-narrated > .first-word-in-line {
@@ -29,4 +29,65 @@
 .line-being-narrated > .last-word-in-line {
     border-top-right-radius: 5%;
     border-bottom-right-radius: 5%;
+}
+
+/* AI Word Highlighting Styles for Line-Focus Template */
+.word.highlight.word-being-narrated {
+    font-size: 5.5vw !important;  /* Even larger for line-focus */
+    color: #FFFFFF !important;
+    background-color: #DC143C !important;  /* Crimson red for highlights */
+    font-weight: bold !important;
+    text-shadow: 
+        0 0 12px #DC143C,
+        -2px -2px 2px #000,
+        2px -2px 2px #000,
+        -2px 2px 2px #000,
+        2px 2px 2px #000 !important;
+    animation: line-focus-highlight 1s ease-in-out infinite;
+}
+
+.word.emphasis.word-being-narrated {
+    font-size: 5.2vw !important;
+    color: #FFFFFF !important;
+    background-color: #4169E1 !important;  /* Royal blue for emphasis */
+    font-weight: bold !important;
+    text-shadow: 
+        0 0 10px #4169E1,
+        -2px -2px 2px #000,
+        2px -2px 2px #000,
+        -2px 2px 2px #000,
+        2px 2px 2px #000 !important;
+}
+
+/* Also style highlighted words in other states */
+.word.highlight.word-not-narrated-yet,
+.word.highlight.word-already-narrated {
+    font-size: 4.8vw !important;
+    background-color: #CD5C5C !important;  /* Indian red for non-current highlights */
+    font-weight: bold !important;
+    color: #FFFFFF !important;
+}
+
+.word.emphasis.word-not-narrated-yet,
+.word.emphasis.word-already-narrated {
+    font-size: 4.6vw !important;
+    background-color: #6495ED !important;  /* Cornflower blue for non-current emphasis */
+    font-weight: bold !important;
+    color: #FFFFFF !important;
+}
+
+/* Line-focus highlight animation */
+@keyframes line-focus-highlight {
+    0% { 
+        transform: scale(1);
+        box-shadow: 0 0 5px rgba(220,20,60,0.5);
+    }
+    50% { 
+        transform: scale(1.02);
+        box-shadow: 0 0 15px rgba(220,20,60,0.8);
+    }
+    100% { 
+        transform: scale(1);
+        box-shadow: 0 0 5px rgba(220,20,60,0.5);
+    }
 }

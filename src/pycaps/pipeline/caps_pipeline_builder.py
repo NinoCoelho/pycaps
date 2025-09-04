@@ -11,6 +11,7 @@ from pycaps.tag import TagCondition, SemanticTagger, StructureTagger
 from pycaps.effect import TextEffect, ClipEffect, SoundEffect, Effect
 from pycaps.logger import logger
 from pycaps.renderer import SubtitleRenderer
+from pycaps.ai.intelligent_enhancement import IntelligentEnhancement, EnhancementPresets
 
 class CapsPipelineBuilder:
 
@@ -292,6 +293,103 @@ class CapsPipelineBuilder:
             self._caps_pipeline._clip_effects.append(effect)
         elif isinstance(effect, SoundEffect):
             self._caps_pipeline._sound_effects.append(effect)
+        return self
+    
+    def with_ai_enhancements(
+        self, 
+        enabled: bool = True,
+        preset: Optional[str] = None,
+        word_highlighting: bool = True,
+        emoji_enhancement: bool = True,
+        content_type: str = "general",
+        **kwargs
+    ) -> "CapsPipelineBuilder":
+        """
+        Enable AI-powered enhancements for word highlighting and emoji placement.
+        
+        Args:
+            enabled: Whether to enable AI enhancements
+            preset: Enhancement preset ("minimal", "balanced", "aggressive", "professional", "entertainment")
+            word_highlighting: Whether to enable AI word importance detection and highlighting
+            emoji_enhancement: Whether to enable AI emoji suggestions
+            content_type: Content type for AI analysis ("general", "educational", "professional", "entertainment")
+            **kwargs: Additional configuration parameters
+        """
+        if not enabled:
+            logger().info("AI enhancements disabled")
+            return self
+        
+        # Get video properties if available for responsive design
+        video_width = kwargs.get('video_width')
+        video_height = kwargs.get('video_height')
+        base_font_size = kwargs.get('base_font_size')
+        template_name = kwargs.get('template_name')
+        
+        if preset:
+            # Use preset configuration
+            enhancement = EnhancementPresets.create_enhancement_for_preset(
+                preset, 
+                template_name=template_name,
+                video_width=video_width,
+                video_height=video_height,
+                base_font_size=base_font_size,
+                content_type=content_type
+            )
+        else:
+            # Use custom configuration
+            enhancement = IntelligentEnhancement(
+                template_name=template_name,
+                video_width=video_width,
+                video_height=video_height,
+                base_font_size=base_font_size,
+                content_type=content_type
+            )
+        
+        # Store the enhancement system in the pipeline
+        self._caps_pipeline._ai_enhancement = enhancement
+        
+        logger().info(f"AI enhancements enabled with preset: {preset or 'custom'}")
+        return self
+    
+    def with_ai_word_highlighting(
+        self, 
+        enabled: bool = True,
+        max_words: int = 5,
+        intensity: float = 1.0
+    ) -> "CapsPipelineBuilder":
+        """
+        Enable AI-powered word highlighting specifically.
+        
+        Args:
+            enabled: Whether to enable word highlighting
+            max_words: Maximum number of words to highlight
+            intensity: Highlighting intensity multiplier
+        """
+        # Set environment variables for configuration
+        import os
+        os.environ['PYCAPS_AI_HIGHLIGHTING_ENABLED'] = str(enabled)
+        os.environ['PYCAPS_MAX_HIGHLIGHTED_WORDS'] = str(max_words)
+        os.environ['PYCAPS_HIGHLIGHT_INTENSITY'] = str(intensity)
+        
+        return self
+    
+    def with_ai_emoji_enhancement(
+        self, 
+        enabled: bool = True,
+        strategy: str = "balanced"
+    ) -> "CapsPipelineBuilder":
+        """
+        Enable AI-powered emoji enhancement specifically.
+        
+        Args:
+            enabled: Whether to enable emoji enhancement
+            strategy: Emoji placement strategy ("end_of_phrase", "after_keywords", "balanced")
+        """
+        # Set environment variables for configuration
+        import os
+        os.environ['PYCAPS_AI_EMOJI_ENABLED'] = str(enabled)
+        os.environ['PYCAPS_EMOJI_STRATEGY'] = strategy
+        
         return self
 
     def build(self, preview_time: Optional[tuple[float, float]] = None) -> CapsPipeline:

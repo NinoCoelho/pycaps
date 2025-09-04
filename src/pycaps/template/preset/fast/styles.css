@@ -1,6 +1,6 @@
 .word {
     font-family: cursive, sans-serif;
-    font-size: 30px;
+    font-size: 3.5vw;
     color: white;
     font-weight: bold;
     text-shadow:
@@ -12,4 +12,62 @@
         3px 2px black,
         2px 3px black;
     padding: 10px 5px;
+}
+
+/* AI Word Highlighting Styles for Fast Template */
+.word.highlight.word-being-narrated {
+    font-size: 4.5vw !important;
+    color: #FF6347 !important;  /* Tomato red for fast/dynamic feel */
+    font-weight: 900 !important;
+    text-shadow:
+        0 0 15px #FF6347,
+        0 -2px black,
+        -2px 0 black,
+        0 3px 0 black,
+        3px 0 black,
+        3px 3px black,
+        3px 2px black,
+        2px 3px black !important;
+    animation: fast-speed 0.8s ease-in-out infinite;
+    transform: scale(1.1);
+}
+
+.word.emphasis.word-being-narrated {
+    font-size: 4.2vw !important;
+    color: #FFA500 !important;  /* Orange for secondary emphasis */
+    font-weight: 900 !important;
+    text-shadow:
+        0 0 12px #FFA500,
+        0 -2px black,
+        -2px 0 black,
+        0 3px 0 black,
+        3px 0 black,
+        3px 3px black,
+        3px 2px black,
+        2px 3px black !important;
+    transform: scale(1.05);
+}
+
+/* Also style highlighted words in other states */
+.word.highlight.word-not-narrated-yet,
+.word.highlight.word-already-narrated {
+    font-size: 4.2vw !important;
+    font-weight: 900 !important;
+    color: #FF7F50 !important;  /* Coral for non-current highlights */
+}
+
+.word.emphasis.word-not-narrated-yet,
+.word.emphasis.word-already-narrated {
+    font-size: 4vw !important;
+    font-weight: 900 !important;
+    color: #FFB347 !important;  /* Peach for non-current emphasis */
+}
+
+/* Fast speed animation */
+@keyframes fast-speed {
+    0% { transform: scale(1.1) rotate(0deg); }
+    25% { transform: scale(1.15) rotate(1deg); }
+    50% { transform: scale(1.1) rotate(0deg); }
+    75% { transform: scale(1.15) rotate(-1deg); }
+    100% { transform: scale(1.1) rotate(0deg); }
 }

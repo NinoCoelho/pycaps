@@ -67,6 +67,13 @@ def render(
     portuguese_variant: Optional[str] = typer.Option("pt", "--portuguese-variant", help="Portuguese variant: pt (European) or pt-BR (Brazilian)", rich_help_panel="Translation", show_default=False),
     enable_context_translation: bool = typer.Option(True, "--context-translation/--no-context-translation", help="Enable context-aware batch translation", rich_help_panel="Translation", show_default=False),
 
+    # AI Enhancement options
+    ai_enhancements: bool = typer.Option(True, "--ai-enhancements/--no-ai-enhancements", help="Enable AI-powered word highlighting and emoji enhancements", rich_help_panel="AI Enhancement", show_default=False),
+    ai_preset: Optional[str] = typer.Option(None, "--ai-preset", help="AI enhancement preset: minimal, balanced, aggressive, professional, entertainment", rich_help_panel="AI Enhancement", show_default=False),
+    ai_word_highlighting: bool = typer.Option(True, "--ai-word-highlighting/--no-ai-word-highlighting", help="Enable AI-powered word importance detection and highlighting", rich_help_panel="AI Enhancement", show_default=False),
+    ai_emoji_enhancement: bool = typer.Option(True, "--ai-emoji-enhancement/--no-ai-emoji-enhancement", help="Enable AI-powered emoji suggestions", rich_help_panel="AI Enhancement", show_default=False),
+    ai_content_type: Optional[str] = typer.Option("general", "--ai-content-type", help="Content type for AI analysis: general, educational, professional, entertainment", rich_help_panel="AI Enhancement", show_default=False),
+
     video_quality: Optional[VideoQuality] = typer.Option(None, "--video-quality", help="Final video quality", rich_help_panel="Video", show_default=False),
 
     preview: bool = typer.Option(False, "--preview", help="Generate a low quality preview of the rendered video", rich_help_panel="Utils"),
@@ -163,6 +170,24 @@ def render(
     if transcription_preview: builder.should_preview_transcription(True)
     if video_quality: builder.with_video_quality(video_quality)
     if layout_align or layout_align_offset: builder.with_layout_options(_build_layout_options(builder, layout_align, layout_align_offset))
+    
+    # Configure AI enhancements
+    if ai_enhancements:
+        typer.echo(f"Enabling AI enhancements (preset: {ai_preset or 'custom'})...")
+        builder.with_ai_enhancements(
+            enabled=True,
+            preset=ai_preset,
+            word_highlighting=ai_word_highlighting,
+            emoji_enhancement=ai_emoji_enhancement,
+            content_type=ai_content_type,
+            template_name=template_name
+        )
+        
+        # Set specific configurations
+        if not ai_word_highlighting:
+            builder.with_ai_word_highlighting(enabled=False)
+        if not ai_emoji_enhancement:
+            builder.with_ai_emoji_enhancement(enabled=False)
 
     pipeline = builder.build(preview_time=_parse_preview(preview, preview_time))
     pipeline.run()

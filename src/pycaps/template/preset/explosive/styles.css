@@ -5,40 +5,98 @@
 
 .word {
     font-family: CustomFont, sans-serif;
-    font-size: 26px;
+    font-size: 3.5vw;
     color: #FFDD00;
     font-weight: bold;
-    padding: 5px 8px;
+    padding: 0.5vw 0.8vw;
     text-shadow: 
-        0 0 3px #FF8800,
-        0 0 6px #FF8800,
-        0 0 9px #FF4400,
-        1px 1px 1px #000000;
+        0 0 0.3vw #FF8800,
+        0 0 0.6vw #FF8800,
+        0 0 0.9vw #FF4400,
+        0.1vw 0.1vw 0.1vw #000000;
 }
 
 .word-not-narrated-yet {
     color: #CCAA00;
     text-shadow: 
-        0 0 2px #CC6600,
-        0 0 4px #CC3300,
-        1px 1px 1px #000000;
+        0 0 0.2vw #CC6600,
+        0 0 0.4vw #CC3300,
+        0.1vw 0.1vw 0.1vw #000000;
 }
 
 .word-being-narrated {
     color: #FFFFFF;
     text-shadow: 
-        0 0 4px #FFAA00,
-        0 0 8px #FF8800,
-        0 0 12px #FF0000,
-        0 0 20px #FF0000,
-        1px 1px 1px #000000;
+        0 0 0.4vw #FFAA00,
+        0 0 0.8vw #FF8800,
+        0 0 1.2vw #FF0000,
+        0 0 2vw #FF0000,
+        0.1vw 0.1vw 0.1vw #000000;
 }
 
 .word-already-narrated {
     color: #FFDD00;
     text-shadow: 
-        0 0 3px #FF8800,
-        0 0 6px #FF8800,
-        0 0 9px #FF4400,
-        1px 1px 1px #000000;
+        0 0 0.3vw #FF8800,
+        0 0 0.6vw #FF8800,
+        0 0 0.9vw #FF4400,
+        0.1vw 0.1vw 0.1vw #000000;
+}
+
+/* AI Word Highlighting Styles for Explosive Template */
+.word.highlight.word-being-narrated {
+    font-size: 4.5vw !important;
+    color: #FF0000 !important;  /* Pure red for maximum explosion */
+    font-weight: 900 !important;
+    text-shadow: 
+        0 0 1vw #FFFF00,
+        0 0 2vw #FF8800,
+        0 0 3vw #FF4400,
+        0 0 4vw #FF0000,
+        0.2vw 0.2vw 0.2vw #000000 !important;
+    animation: explosive-pulse 1s ease-in-out infinite;
+    transform: scale(1.1);
+}
+
+.word.emphasis.word-being-narrated {
+    font-size: 4.2vw !important;
+    color: #FFA500 !important;  /* Orange for secondary explosion */
+    font-weight: 900 !important;
+    text-shadow: 
+        0 0 0.8vw #FFFF00,
+        0 0 1.6vw #FFA500,
+        0 0 2.4vw #FF8800,
+        0.15vw 0.15vw 0.15vw #000000 !important;
+    animation: emphasis-vibrate 0.5s ease-in-out infinite;
+}
+
+/* Also style highlighted words in other states */
+.word.highlight.word-not-narrated-yet,
+.word.highlight.word-already-narrated {
+    font-size: 4.2vw !important;
+    font-weight: 900 !important;
+    color: #FF6600 !important;
+}
+
+.word.emphasis.word-not-narrated-yet,
+.word.emphasis.word-already-narrated {
+    font-size: 4vw !important;
+    font-weight: 900 !important;
+    color: #FFAA00 !important;
+}
+
+/* Explosive animations */
+@keyframes explosive-pulse {
+    0% { transform: scale(1) rotate(0deg); }
+    25% { transform: scale(1.15) rotate(2deg); }
+    50% { transform: scale(1.1) rotate(-2deg); }
+    75% { transform: scale(1.15) rotate(1deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes emphasis-vibrate {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-0.2vw); }
+    75% { transform: translateX(0.2vw); }
+    100% { transform: translateX(0); }
 }

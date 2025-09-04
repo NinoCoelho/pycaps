@@ -1,10 +1,61 @@
 .word {
     font-family: 'Arial', sans-serif;
-    font-size: 18px;
+    font-size: 3.5vw;
     color: white;
     padding: 4px 4px;
     text-shadow: 
         1px 1px 0px black, -1px 1px 0px black, 
         1px -1px 0px black, -1px -1px 0px black,
         2px 2px 3px rgba(0,0,0,0.7);
+}
+
+/* AI Word Highlighting Styles for Classic Template */
+.word.highlight.word-being-narrated {
+    font-size: 4.5vw !important;
+    color: #FFD700 !important;  /* Classic gold for highlights */
+    font-weight: bold !important;
+    text-shadow: 
+        0 0 8px #FFD700,
+        1px 1px 0px black, -1px 1px 0px black,
+        1px -1px 0px black, -1px -1px 0px black,
+        2px 2px 5px rgba(0,0,0,0.9) !important;
+    animation: classic-glow 1.5s ease-in-out infinite alternate;
+}
+
+.word.emphasis.word-being-narrated {
+    font-size: 4.2vw !important;
+    color: #87CEEB !important;  /* Sky blue for emphasis */
+    font-weight: bold !important;
+    text-shadow: 
+        0 0 6px #87CEEB,
+        1px 1px 0px black, -1px 1px 0px black,
+        1px -1px 0px black, -1px -1px 0px black,
+        2px 2px 4px rgba(0,0,0,0.8) !important;
+}
+
+/* Also style highlighted words in other states */
+.word.highlight.word-not-narrated-yet,
+.word.highlight.word-already-narrated {
+    font-size: 4.2vw !important;
+    font-weight: bold !important;
+    color: #F0E68C !important;  /* Khaki for non-current highlights */
+}
+
+.word.emphasis.word-not-narrated-yet,
+.word.emphasis.word-already-narrated {
+    font-size: 4vw !important;
+    font-weight: bold !important;
+    color: #B0E0E6 !important;  /* Powder blue for non-current emphasis */
+}
+
+/* Classic glow animation */
+@keyframes classic-glow {
+    0% { 
+        transform: scale(1);
+        filter: brightness(1);
+    }
+    100% { 
+        transform: scale(1.02);
+        filter: brightness(1.3);
+    }
 }

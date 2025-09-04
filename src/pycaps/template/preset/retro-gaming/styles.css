@@ -5,7 +5,7 @@
 
 .word {
     font-family: 'Press Start 2P', 'Courier New', Courier, monospace;
-    font-size: 16px;
+    font-size: 3.5vw;
     color: #E0E0E0;
     background-color: rgba(20, 20, 80, 0.85);
     padding: 6px 7px;
@@ -26,4 +26,49 @@
 
 .line-being-narrated {
     background-color: rgba(30, 30, 100, 0.85);
+}
+
+/* AI Word Highlighting Styles for Retro-Gaming Template */
+.word.highlight.word-being-narrated {
+    font-size: 4.5vw !important;
+    color: #00FF00 !important;  /* Classic green for retro gaming highlights */
+    background-color: rgba(0, 80, 0, 0.9) !important;  /* Dark green background */
+    font-weight: normal !important;
+    border: 4px solid #00FF00 !important;
+    animation: retro-blink 0.8s linear infinite;
+    text-shadow: 0 0 8px #00FF00;
+}
+
+.word.emphasis.word-being-narrated {
+    font-size: 4.2vw !important;
+    color: #FF00FF !important;  /* Magenta for emphasis */
+    background-color: rgba(80, 0, 80, 0.9) !important;  /* Dark magenta background */
+    font-weight: normal !important;
+    border: 3px solid #FF00FF !important;
+    text-shadow: 0 0 6px #FF00FF;
+}
+
+/* Also style highlighted words in other states */
+.word.highlight.word-not-narrated-yet,
+.word.highlight.word-already-narrated {
+    font-size: 4.2vw !important;
+    color: #008000 !important;  /* Darker green for non-current highlights */
+    background-color: rgba(0, 60, 0, 0.8) !important;
+    border: 3px solid #008000 !important;
+    font-weight: normal !important;
+}
+
+.word.emphasis.word-not-narrated-yet,
+.word.emphasis.word-already-narrated {
+    font-size: 4vw !important;
+    color: #C000C0 !important;  /* Darker magenta for non-current emphasis */
+    background-color: rgba(60, 0, 60, 0.8) !important;
+    border: 3px solid #C000C0 !important;
+    font-weight: normal !important;
+}
+
+/* Retro gaming blink animation */
+@keyframes retro-blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0.7; }
 }

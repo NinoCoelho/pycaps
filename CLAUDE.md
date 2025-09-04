@@ -312,7 +312,13 @@ logging.basicConfig(level=logging.DEBUG)
 
 ## Project Roadmap
 
-### Current Version: 0.3.4 (Alpha)
+### Current Version: 0.3.5 (Alpha)
+
+### New in v0.3.5
+- **RedPill Template Improvements** - Fixed text overflow issues and improved layout boundaries
+- **AI Word Highlighting Refinement** - Consolidated highlighting to use `.word.emphasis` class
+- **Better Text Boundaries** - Reduced max width ratio for comfortable edge padding
+- **Increased Line Capacity** - Expanded from 2 to 3 lines for better text distribution
 
 ### New in v0.3.4
 - **Proportional Font Sizing for Redpill Template** - Font size now scales automatically with video canvas dimensions
@@ -371,4 +377,4 @@ logging.basicConfig(level=logging.DEBUG)
 5. Submit PR with clear description
 
 ---
-*pycaps v0.3.4 | CSS-styled video subtitles | Proportional responsive templates | English-to-Portuguese translation | Faster-Whisper integration | Anti-hallucination AI transcription*
+*pycaps v0.3.5 | CSS-styled video subtitles | Improved RedPill template | Enhanced AI word highlighting | English-to-Portuguese translation | Faster-Whisper integration*

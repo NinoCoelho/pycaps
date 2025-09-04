@@ -16,3 +16,35 @@
     background-color: #e41f23;
     border-radius: 1.25vw;
 }
+
+/* AI Word Highlighting Styles for RedPill Template */
+.word.emphasis.word-being-narrated {
+    font-size: 4.5vw !important;
+    background-color: #ff0000 !important;  /* Brighter red for emphasis */
+    color: #FFD700 !important;  /* Gold text */
+    border-radius: 1.5vw;
+    padding: 0.8vw 0.6vw;
+    text-shadow: 
+        0 0 2vw #ff0000,
+        0 0.3vw 0.6vw rgba(0, 0, 0, 0.9);
+    animation: emphasis-glow 1.5s ease-in-out infinite alternate;
+}
+
+/* Also style emphasized words in other states */
+.word.emphasis.word-not-narrated-yet,
+.word.emphasis.word-already-narrated {
+    font-size: 4vw !important;
+    color: #ffcccc !important;  /* Very light red tint */
+}
+
+/* Animation for emphasized words */
+@keyframes emphasis-glow {
+    0% { 
+        opacity: 1;
+        box-shadow: 0 0 1vw rgba(255,0,0,0.5);
+    }
+    100% { 
+        opacity: 0.9;
+        box-shadow: 0 0 2vw rgba(255,0,0,0.8);
+    }
+}

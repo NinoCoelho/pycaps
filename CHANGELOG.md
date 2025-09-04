@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.5] - 2025-09-04
+
+### 🎨 Template Improvements
+
+#### RedPill Template Enhancements
+- **Fixed text overflow issues** - Changed overflow strategy to `exceed_width` to prevent vertical text overflow
+- **Improved AI word highlighting** - Consolidated all highlighting to use `.word.emphasis` class instead of `.word.highlight`
+- **Better text boundaries** - Reduced `max_width_ratio` from 0.75 to 0.65 for more comfortable edge padding
+- **Increased line capacity** - Expanded `max_number_of_lines` from 2 to 3 for better text distribution
+- **Enhanced emphasis styling** - Bright red background (#ff0000) with gold text (#FFD700) for AI-highlighted words
+
+### 🐛 Bug Fixes
+- Fixed text overflow in RedPill template that caused subtitles to exceed viewport boundaries
+- Removed duplicate CSS selectors for word highlighting functionality
+- Corrected text wrapping behavior for long subtitle segments
+
+### 🔧 Technical Improvements
+- Cleaned up CSS styling rules in RedPill template
+- Optimized layout configuration for better responsive behavior
+- Improved text positioning with proper padding and boundaries
+
 ## [0.3.2] - 2025-08-22
 
 ### 🐛 Bug Fixes

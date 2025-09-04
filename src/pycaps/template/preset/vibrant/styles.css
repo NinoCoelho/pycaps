@@ -5,7 +5,7 @@
 
 .word {
     font-family: CustomFont, 'Impact', sans-serif;
-    font-size: 26px;
+    font-size: 3.5vw;
     color: white;
     font-weight: 900;
     padding: 4px 6px;
@@ -29,6 +29,76 @@
 
 .emoji-for-segment {
     text-shadow: 1px 1px 2px black;
-    font-size: 32px;
+    font-size: 4.2vw;
     color: #FFFFFF !important;
+}
+
+/* AI Word Highlighting Styles for Vibrant Template */
+.word.highlight.word-being-narrated {
+    font-size: 4.5vw !important;
+    color: #FFFFFF !important;  /* Pure white for maximum contrast */
+    font-weight: 900 !important;
+    text-shadow: 
+        0 0 20px #FFD700,  /* Golden glow */
+        -1px -1px 0 #000000,  
+         1px -1px 0 #000000,
+        -1px  1px 0 #000000,
+         1px  1px 0 #000000,
+         4px  4px 0 #00FFFF,  /* Cyan shadow */
+        -4px -4px 0 #FF1493 !important;  /* Hot pink shadow */
+    animation: vibrant-rainbow 1.2s linear infinite;
+    transform: scale(1.15);
+}
+
+.word.emphasis.word-being-narrated {
+    font-size: 4.2vw !important;
+    color: #FFFF00 !important;  /* Bright yellow for emphasis */
+    font-weight: 900 !important;
+    text-shadow: 
+        0 0 15px #FFFF00,
+        -1px -1px 0 #000000,  
+         1px -1px 0 #000000,
+        -1px  1px 0 #000000,
+         1px  1px 0 #000000,
+         3px  3px 0 #FF69B4,  /* Hot pink shadow */
+        -3px -3px 0 #00CED1 !important;  /* Dark turquoise shadow */
+    transform: scale(1.08);
+}
+
+/* Also style highlighted words in other states */
+.word.highlight.word-not-narrated-yet,
+.word.highlight.word-already-narrated {
+    font-size: 4.2vw !important;
+    font-weight: 900 !important;
+    color: #F0F0F0 !important;  /* Light grey for non-current highlights */
+    text-shadow: 
+        -1px -1px 0 #000000,  
+         1px -1px 0 #000000,
+        -1px  1px 0 #000000,
+         1px  1px 0 #000000,
+         2px  2px 0 #808080,  /* Grey shadow */
+        -2px -2px 0 #A0A0A0 !important;
+}
+
+.word.emphasis.word-not-narrated-yet,
+.word.emphasis.word-already-narrated {
+    font-size: 4vw !important;
+    font-weight: 900 !important;
+    color: #E0E0E0 !important;  /* Lighter grey for non-current emphasis */
+    text-shadow: 
+        -1px -1px 0 #000000,  
+         1px -1px 0 #000000,
+        -1px  1px 0 #000000,
+         1px  1px 0 #000000,
+         2px  2px 0 #696969,  /* Dim grey shadow */
+        -2px -2px 0 #909090 !important;
+}
+
+/* Vibrant rainbow animation */
+@keyframes vibrant-rainbow {
+    0% { filter: hue-rotate(0deg); }
+    25% { filter: hue-rotate(90deg); }
+    50% { filter: hue-rotate(180deg); }
+    75% { filter: hue-rotate(270deg); }
+    100% { filter: hue-rotate(360deg); }
 }

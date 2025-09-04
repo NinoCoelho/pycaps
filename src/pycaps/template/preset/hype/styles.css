@@ -5,7 +5,7 @@
 
 .word {
     font-family: 'Komika Axis';
-    font-size: 24px;
+    font-size: 3.5vw;
     color: #DDDDDD;
     font-weight: 800;
     text-shadow: 
@@ -14,7 +14,7 @@
         -2px  2px 0 #000,
          2px  2px 0 #000,
          3px  3px 5px rgba(0,0,0,0.5);
-    padding: 3px 5px;
+    padding: 0.3vw 0.5vw;
 }
 
 .word-being-narrated {
@@ -23,4 +23,68 @@
 
 .word-already-narrated {
     color: #FFFFFF;
+}
+
+/* AI Word Highlighting Styles for Hype Template */
+.word.highlight.word-being-narrated {
+    font-size: 4.5vw !important;
+    color: #FFD700 !important;  /* Gold - matches the energetic theme */
+    font-weight: 900 !important;
+    text-shadow: 
+        0 0 30px #FFD700,
+        0 0 20px #FFA500,
+        0 0 10px #FF8C00,
+        -2px -2px 0 #000,  
+         2px -2px 0 #000,
+        -2px  2px 0 #000,
+         2px  2px 0 #000 !important;
+    transform: scale(1.1);
+    animation: highlight-pulse 2s ease-in-out;
+}
+
+.word.emphasis.word-being-narrated {
+    font-size: 4.2vw !important;
+    color: #00FFFF !important;  /* Cyan - complementary energetic color */
+    font-weight: 900 !important;
+    text-shadow: 
+        0 0 25px #00FFFF,
+        0 0 15px #00CED1,
+        0 0 8px #008B8B,
+        -2px -2px 0 #000,  
+         2px -2px 0 #000,
+        -2px  2px 0 #000,
+         2px  2px 0 #000 !important;
+    transform: scale(1.05);
+    animation: emphasis-glow 1.5s ease-in-out infinite alternate;
+}
+
+/* Also style highlighted words in other states */
+.word.highlight.word-not-narrated-yet,
+.word.highlight.word-already-narrated {
+    font-size: 4.2vw !important;
+    font-weight: 900 !important;
+}
+
+.word.emphasis.word-not-narrated-yet,
+.word.emphasis.word-already-narrated {
+    font-size: 4vw !important;
+    font-weight: 900 !important;
+}
+
+/* Animations for highlighted words */
+@keyframes highlight-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@keyframes emphasis-glow {
+    0% { 
+        transform: scale(1);
+        filter: brightness(1);
+    }
+    100% { 
+        transform: scale(1.05);
+        filter: brightness(1.3);
+    }
 }

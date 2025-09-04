@@ -1,0 +1,79 @@
+.word {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 3.5vw;
+    color: #E8E8E8;
+    background-color: rgba(20, 20, 20, 0.85);
+    padding: 0.4vw 0.6vw;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+    font-weight: 400;
+}
+
+.word-being-narrated {
+    color: #FFFFFF;
+    background-color: rgba(40, 40, 40, 0.9);
+    font-weight: 500;
+}
+
+.word-already-narrated {
+    color: #CCCCCC;
+    background-color: rgba(30, 30, 30, 0.8);
+}
+
+/* AI Word Highlighting Styles for Model Template */
+.word.highlight.word-being-narrated {
+    font-size: 4.5vw !important;
+    color: #FFFFFF !important;  /* Pure white for highlights */
+    background-color: rgba(80, 80, 80, 0.95) !important;  /* Lighter background */
+    font-weight: 700 !important;
+    text-shadow: 
+        0 0 10px rgba(255, 255, 255, 0.6),
+        1px 1px 3px rgba(0,0,0,0.9) !important;
+    animation: model-highlight 1.8s ease-in-out infinite;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.word.emphasis.word-being-narrated {
+    font-size: 4.2vw !important;
+    color: #F0F0F0 !important;  /* Off-white for emphasis */
+    background-color: rgba(60, 60, 60, 0.9) !important;
+    font-weight: 600 !important;
+    text-shadow: 
+        0 0 8px rgba(240, 240, 240, 0.5),
+        1px 1px 3px rgba(0,0,0,0.8) !important;
+    border: 1px solid rgba(240, 240, 240, 0.2);
+}
+
+/* Also style highlighted words in other states */
+.word.highlight.word-not-narrated-yet,
+.word.highlight.word-already-narrated {
+    font-size: 4.2vw !important;
+    color: #D8D8D8 !important;
+    background-color: rgba(50, 50, 50, 0.85) !important;
+    font-weight: 600 !important;
+    border: 1px solid rgba(216, 216, 216, 0.2);
+}
+
+.word.emphasis.word-not-narrated-yet,
+.word.emphasis.word-already-narrated {
+    font-size: 4vw !important;
+    color: #C8C8C8 !important;
+    background-color: rgba(45, 45, 45, 0.8) !important;
+    font-weight: 500 !important;
+    border: 1px solid rgba(200, 200, 200, 0.15);
+}
+
+/* Model highlight animation */
+@keyframes model-highlight {
+    0% { 
+        transform: scale(1);
+        opacity: 0.95;
+    }
+    50% { 
+        transform: scale(1.01);
+        opacity: 1;
+    }
+    100% { 
+        transform: scale(1);
+        opacity: 0.95;
+    }
+}

@@ -10,13 +10,27 @@ class Gpt(Llm):
         if model is None:
             model = self._get_default_model()
         
-        response = self._get_client().chat.completions.create(
-            model=model,
-            messages=[{"role": "user", "content": prompt}],
-            max_tokens=1000,
-            temperature=0.1
-        )
-        return response.choices[0].message.content
+        import openai
+        # Check if this is the old API (v0.x) or new API (v1.x)
+        if hasattr(openai, 'ChatCompletion'):
+            # Old API (v0.x)
+            response = openai.ChatCompletion.create(
+                model=model,
+                messages=[{"role": "user", "content": prompt}],
+                max_tokens=1000,
+                temperature=0.1
+            )
+            return response.choices[0].message.content
+        else:
+            # New API (v1.x)
+            client = self._get_client()
+            response = client.chat.completions.create(
+                model=model,
+                messages=[{"role": "user", "content": prompt}],
+                max_tokens=1000,
+                temperature=0.1
+            )
+            return response.choices[0].message.content
     
     def is_enabled(self) -> bool:
         # Check if AI functionality is explicitly disabled
@@ -32,20 +46,31 @@ class Gpt(Llm):
 
     def _get_client(self):
         try:
-            from openai import OpenAI
-
-            if self._client:
-                return self._client
-
+            import openai
+            
+            # Set up OpenAI configuration based on API version
             api_key = os.getenv("OPENAI_API_KEY")
             base_url = os.getenv("OPENAI_BASE_URL")
             
-            if base_url:
-                self._client = OpenAI(api_key=api_key, base_url=base_url)
+            if hasattr(openai, 'ChatCompletion'):
+                # Old API (v0.x) - configure globally
+                openai.api_key = api_key
+                if base_url:
+                    openai.api_base = base_url
+                return None  # No client needed for old API
             else:
-                self._client = OpenAI(api_key=api_key)
-            
-            return self._client
+                # New API (v1.x) - use client
+                from openai import OpenAI
+                
+                if self._client:
+                    return self._client
+
+                if base_url:
+                    self._client = OpenAI(api_key=api_key, base_url=base_url)
+                else:
+                    self._client = OpenAI(api_key=api_key)
+                
+                return self._client
         except ImportError:
             raise ImportError(
                 "OpenAI API not found. "

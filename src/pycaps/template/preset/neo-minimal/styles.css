@@ -1,6 +1,6 @@
 .word {
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-    font-size: 14px;
+    font-size: 3.5vw;
     color: #D4D4D4;
     padding: 4px 5px;
     align-content: center;
@@ -43,4 +43,55 @@
 .word-being-narrated.highlighted.first-word-in-line, .word-already-narrated.highlighted.first-word-in-line {
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
+}
+
+/* AI Word Highlighting Styles for Neo-Minimal Template */
+.word.highlight.word-being-narrated {
+    font-size: 4.5vw !important;
+    color: #FFFFFF !important;  /* Pure white for VSCode-style highlighting */
+    background-color: #0078D4 !important;  /* VSCode blue for highlights */
+    font-weight: bold !important;
+    text-shadow: none !important;
+    animation: neo-minimal-highlight 1.5s ease-in-out infinite alternate;
+    border-radius: 4px;
+}
+
+.word.emphasis.word-being-narrated {
+    font-size: 4.2vw !important;
+    color: #FFFF99 !important;  /* Light yellow for emphasis */
+    background-color: #2D2D30 !important;  /* Slightly lighter background */
+    font-weight: bold !important;
+    text-shadow: none !important;
+    border-radius: 4px;
+}
+
+/* Also style highlighted words in other states */
+.word.highlight.word-not-narrated-yet,
+.word.highlight.word-already-narrated {
+    font-size: 4.2vw !important;
+    color: #E0E0E0 !important;
+    background-color: #005A9E !important;  /* Darker blue for non-current highlights */
+    font-weight: bold !important;
+    border-radius: 4px;
+}
+
+.word.emphasis.word-not-narrated-yet,
+.word.emphasis.word-already-narrated {
+    font-size: 4vw !important;
+    color: #CCCC99 !important;  /* Muted yellow for non-current emphasis */
+    background-color: #2A2A2D !important;
+    font-weight: bold !important;
+    border-radius: 4px;
+}
+
+/* Neo-minimal highlight animation */
+@keyframes neo-minimal-highlight {
+    0% { 
+        opacity: 0.9;
+        transform: translateY(0);
+    }
+    100% { 
+        opacity: 1;
+        transform: translateY(-1px);
+    }
 }

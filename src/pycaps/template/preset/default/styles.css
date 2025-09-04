@@ -4,7 +4,7 @@
 }
 
 .word {
-    font-size: 20px;
+    font-size: 3.5vw;
     color: white;
     font-family: CustomFont, Gadget, sans-serif;
     font-weight: 800;
@@ -13,4 +13,50 @@
         1px -1px 0px black, -1px -1px 0px black,
         2px 2px 3px rgba(0,0,0,0.7);
     padding: 3px 5px;
+}
+
+/* AI Word Highlighting Styles for Default Template */
+.word.highlight.word-being-narrated {
+    font-size: 4.5vw !important;
+    color: #00BFFF !important;  /* Deep sky blue for highlights */
+    font-weight: 900 !important;
+    text-shadow: 
+        0 0 10px #00BFFF,
+        1px 1px 0px black, -1px 1px 0px black,
+        1px -1px 0px black, -1px -1px 0px black,
+        2px 2px 5px rgba(0,0,0,0.9) !important;
+    animation: default-pulse 1.2s ease-in-out infinite;
+}
+
+.word.emphasis.word-being-narrated {
+    font-size: 4.2vw !important;
+    color: #32CD32 !important;  /* Lime green for emphasis */
+    font-weight: 900 !important;
+    text-shadow: 
+        0 0 8px #32CD32,
+        1px 1px 0px black, -1px 1px 0px black,
+        1px -1px 0px black, -1px -1px 0px black,
+        2px 2px 4px rgba(0,0,0,0.8) !important;
+}
+
+/* Also style highlighted words in other states */
+.word.highlight.word-not-narrated-yet,
+.word.highlight.word-already-narrated {
+    font-size: 4.2vw !important;
+    font-weight: 900 !important;
+    color: #87CEEB !important;  /* Sky blue for non-current highlights */
+}
+
+.word.emphasis.word-not-narrated-yet,
+.word.emphasis.word-already-narrated {
+    font-size: 4vw !important;
+    font-weight: 900 !important;
+    color: #90EE90 !important;  /* Light green for non-current emphasis */
+}
+
+/* Default pulse animation */
+@keyframes default-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }

@@ -43,6 +43,9 @@ class CapsPipeline:
         self._resources_dir: Optional[str] = None
         self._cache_strategy: CacheStrategy = CacheStrategy.CSS_CLASSES_AWARE
 
+        # AI Enhancement system (optional)
+        self._ai_enhancement: Optional['IntelligentEnhancement'] = None
+
         # Internal state attributes
         self._video_generator: VideoGenerator = VideoGenerator()
         self._clips_generator: Optional[SubtitleClipsGenerator] = None
@@ -146,6 +149,25 @@ class CapsPipeline:
         logger().debug("Applying structure and semantic tags...")
         self._structure_tagger.tag(document)
         self._semantic_tagger.tag(document)
+
+        # Apply AI enhancements first (if enabled)
+        if self._ai_enhancement:
+            logger().debug("Applying AI-powered enhancements...")
+            try:
+                # Pass the renderer to the enhancement system for CSS injection
+                if hasattr(self._ai_enhancement, 'css_highlight_effect'):
+                    self._ai_enhancement.css_highlight_effect.renderer = self._renderer
+                
+                enhancement_results = self._ai_enhancement.enhance_document(document)
+                enhancement_summary = self._ai_enhancement.get_enhancement_summary(enhancement_results)
+                logger().info(f"AI enhancements: {enhancement_summary}")
+                
+                if enhancement_results['errors']:
+                    for error in enhancement_results['errors']:
+                        logger().warning(f"AI enhancement error: {error}")
+            except Exception as e:
+                logger().error(f"AI enhancement failed: {e}")
+                logger().info("Continuing with standard processing...")
 
         logger().debug("Applying text effects...")
         for effect in self._text_effects:
