@@ -19,7 +19,7 @@
 
 /* AI Word Highlighting Styles for RedPill Template */
 .word.emphasis.word-being-narrated {
-    font-size: 4.5vw !important;
+    font-size: 5vw !important;
     background-color: #ff0000 !important;  /* Brighter red for emphasis */
     color: #FFD700 !important;  /* Gold text */
     border-radius: 1.5vw;
@@ -34,7 +34,7 @@
 .word.emphasis.word-not-narrated-yet,
 .word.emphasis.word-already-narrated {
     font-size: 4vw !important;
-    color: #ffcccc !important;  /* Very light red tint */
+    color: #ffffff !important;  /* Very light red tint */
 }
 
 /* Animation for emphasized words */
