@@ -342,7 +342,8 @@ class CapsPipelineBuilder:
                 video_width=video_width,
                 video_height=video_height,
                 base_font_size=base_font_size,
-                content_type=content_type
+                content_type=content_type,
+                preset=preset  # Pass preset even for custom config
             )
         
         # Store the enhancement system in the pipeline

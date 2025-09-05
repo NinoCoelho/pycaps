@@ -1,7 +1,6 @@
 from typing import Dict, List, Optional, Any
 from pycaps.common import Document
 from pycaps.tag.tagger.word_importance_tagger import WordImportanceTagger
-from pycaps.tag.tagger.manual_word_tagger import ManualWordTagger
 from pycaps.effect.text.highlight_styling_effect import ResponsiveHighlightStylingEffect
 from pycaps.effect.text.css_highlight_effect import CssHighlightEffect
 from pycaps.effect.text.ai_emoji_effect import ConfigurableAiEmojiEffect
@@ -23,7 +22,8 @@ class IntelligentEnhancement:
         video_width: Optional[int] = None,
         video_height: Optional[int] = None,
         base_font_size: Optional[int] = None,
-        content_type: str = "general"
+        content_type: str = "general",
+        preset: Optional[str] = None
     ):
         """
         Initialize intelligent enhancement system.
@@ -34,19 +34,20 @@ class IntelligentEnhancement:
             video_height: Video height in pixels
             base_font_size: Base font size of the template
             content_type: Type of content for AI analysis
+            preset: Enhancement preset to use
         """
         self.template_name = template_name
         self.video_width = video_width
         self.video_height = video_height
         self.base_font_size = base_font_size
         self.content_type = content_type
+        self.preset = preset or "balanced"
         
         # Configuration
         self.config = self._load_configuration()
         
-        # Initialize components
-        self.word_importance_tagger = WordImportanceTagger()
-        self.manual_word_tagger = self._create_manual_tagger()
+        # Initialize components - AI-only approach
+        self.word_importance_tagger = WordImportanceTagger(preset=self.preset, content_type=self.content_type)
         self.highlight_styling_effect = self._create_highlight_styling_effect()
         self.css_highlight_effect = CssHighlightEffect(template_name=self.template_name)
         self.ai_emoji_effect = self._create_ai_emoji_effect()
@@ -68,16 +69,6 @@ class IntelligentEnhancement:
         value = os.getenv(var_name, str(default)).lower()
         return value not in ("false", "0", "no", "off")
 
-    def _create_manual_tagger(self) -> ManualWordTagger:
-        """Create manual word tagger for fallback highlighting."""
-        # Try to detect language from content type or use Portuguese as default
-        if self.content_type in ["portuguese", "pt", "pt-BR"]:
-            return ManualWordTagger.create_portuguese_tagger()
-        elif self.content_type in ["english", "en"]:
-            return ManualWordTagger.create_english_tagger()
-        else:
-            # Default to Portuguese since our test content is Portuguese
-            return ManualWordTagger.create_portuguese_tagger()
 
     def _create_highlight_styling_effect(self) -> ResponsiveHighlightStylingEffect:
         """Create highlight styling effect based on configuration."""
@@ -128,10 +119,13 @@ class IntelligentEnhancement:
             return results
 
         try:
-            # Step 1: Analyze and tag important words
+            # Step 1: Analyze and tag important words using AI
             if self.config['word_highlighting_enabled']:
-                if self.config['ai_enabled']:
-                    logger().info("Analyzing word importance with AI...")
+                if not self.config['ai_enabled']:
+                    logger().warning("AI is required for word highlighting. Please set OPENAI_API_KEY to enable.")
+                    results['errors'].append("AI not available - word highlighting requires AI")
+                else:
+                    logger().info(f"Analyzing word importance with AI (preset: {self.preset})...")
                     try:
                         self.word_importance_tagger.process(
                             document, 
@@ -140,17 +134,15 @@ class IntelligentEnhancement:
                         ai_highlighted_count = self._count_highlighted_words(document)
                         
                         if ai_highlighted_count == 0:
-                            logger().warning("AI did not highlight any words, falling back to manual highlighting...")
-                            self.manual_word_tagger.process(document, self.config['max_highlighted_words'])
+                            logger().warning("AI did not identify any words to highlight - this may be intentional based on the preset and content.")
                         else:
                             logger().info(f"AI successfully highlighted {ai_highlighted_count} words")
                     except Exception as ai_error:
-                        logger().warning(f"AI word highlighting failed: {ai_error}")
-                        logger().info("Falling back to manual word highlighting...")
-                        self.manual_word_tagger.process(document, self.config['max_highlighted_words'])
-                else:
-                    logger().info("AI not available - using manual word highlighting for fallback...")
-                    self.manual_word_tagger.process(document, self.config['max_highlighted_words'])
+                        error_msg = f"AI word highlighting failed: {ai_error}"
+                        logger().error(error_msg)
+                        results['errors'].append(error_msg)
+                        # Don't fall back - AI is required for proper highlighting
+                        return results
                 
                 # Apply highlighting styles
                 logger().info("Applying highlight styling...")
@@ -351,7 +343,12 @@ class EnhancementPresets:
             os.environ[env_key] = str(value)
         
         try:
-            enhancement = IntelligentEnhancement(template_name=template_name, **kwargs)
+            # Pass the preset to the IntelligentEnhancement
+            enhancement = IntelligentEnhancement(
+                template_name=template_name, 
+                preset=preset_name,
+                **kwargs
+            )
             return enhancement
         finally:
             # Restore original environment variables

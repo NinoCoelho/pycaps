@@ -1,36 +1,42 @@
 from pycaps.ai.llm import Llm
 import os
+import json
+import requests
 
 class Gpt(Llm):
 
     def __init__(self):
-        self._client = None
+        self._session = None
 
     def send_message(self, prompt: str, model: str = None) -> str:
         if model is None:
             model = self._get_default_model()
         
-        import openai
-        # Check if this is the old API (v0.x) or new API (v1.x)
-        if hasattr(openai, 'ChatCompletion'):
-            # Old API (v0.x)
-            response = openai.ChatCompletion.create(
-                model=model,
-                messages=[{"role": "user", "content": prompt}],
-                max_tokens=1000,
-                temperature=0.1
-            )
-            return response.choices[0].message.content
-        else:
-            # New API (v1.x)
-            client = self._get_client()
-            response = client.chat.completions.create(
-                model=model,
-                messages=[{"role": "user", "content": prompt}],
-                max_tokens=1000,
-                temperature=0.1
-            )
-            return response.choices[0].message.content
+        # Prepare the request
+        session = self._get_session()
+        url = self._get_api_url()
+        headers = self._get_headers()
+        
+        payload = {
+            "model": model,
+            "messages": [{"role": "user", "content": prompt}],
+            "max_tokens": 1000,
+            "temperature": 0.1
+        }
+        
+        try:
+            response = session.post(url, headers=headers, json=payload, timeout=60)
+            response.raise_for_status()
+            
+            result = response.json()
+            return result["choices"][0]["message"]["content"]
+            
+        except requests.exceptions.RequestException as e:
+            raise RuntimeError(f"HTTP request failed: {e}")
+        except (KeyError, IndexError) as e:
+            raise RuntimeError(f"Unexpected API response format: {e}")
+        except json.JSONDecodeError as e:
+            raise RuntimeError(f"Failed to parse API response: {e}")
     
     def is_enabled(self) -> bool:
         # Check if AI functionality is explicitly disabled
@@ -44,42 +50,33 @@ class Gpt(Llm):
     def _get_default_model(self) -> str:
         return os.getenv("PYCAPS_AI_MODEL", "gpt-4o-mini")
 
-    def _get_client(self):
-        try:
-            import openai
-            
-            # Set up OpenAI configuration based on API version
-            api_key = os.getenv("OPENAI_API_KEY")
-            base_url = os.getenv("OPENAI_BASE_URL")
-            
-            if hasattr(openai, 'ChatCompletion'):
-                # Old API (v0.x) - configure globally
-                openai.api_key = api_key
-                if base_url:
-                    openai.api_base = base_url
-                return None  # No client needed for old API
-            else:
-                # New API (v1.x) - use client
-                from openai import OpenAI
-                
-                if self._client:
-                    return self._client
-
-                if base_url:
-                    self._client = OpenAI(api_key=api_key, base_url=base_url)
-                else:
-                    self._client = OpenAI(api_key=api_key)
-                
-                return self._client
-        except ImportError:
-            raise ImportError(
-                "OpenAI API not found. "
-                "Please install it with: pip install openai"
-            )
-        except Exception as e:
+    def _get_session(self):
+        """Get or create HTTP session for API requests."""
+        if self._session is None:
+            self._session = requests.Session()
+        return self._session
+    
+    def _get_api_url(self) -> str:
+        """Get the API endpoint URL."""
+        base_url = os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")
+        # Ensure base_url doesn't end with slash and add /chat/completions
+        base_url = base_url.rstrip("/")
+        return f"{base_url}/chat/completions"
+    
+    def _get_headers(self) -> dict:
+        """Get HTTP headers for API requests."""
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
             raise RuntimeError(
-                f"Error initializing OpenAI client: {e}\n\n"
-                "Please ensure you have set OPENAI_API_KEY environment variable.\n"
+                "OPENAI_API_KEY environment variable is required\n\n"
+                "Please set your OpenAI API key:\n"
+                "export OPENAI_API_KEY='your-key-here'\n\n"
                 "Optionally set OPENAI_BASE_URL for compatible APIs like OpenRouter.\n"
                 "Optionally set PYCAPS_AI_MODEL to specify the model."
             )
+        
+        return {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+            "User-Agent": "pycaps/0.3.6"
+        }

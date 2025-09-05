@@ -294,6 +294,13 @@ logging.basicConfig(level=logging.DEBUG)
 - Natural content organization
 - Flexible selection mechanisms
 
+### Why HTTP-Based AI Integration?
+- No dependency conflicts with OpenAI client versions
+- Full control over API requests and error handling
+- Compatible with any OpenAI-compatible API (OpenRouter, etc.)
+- Lighter dependency footprint
+- Better timeout and retry control
+
 ## Related Documentation
 
 ### Internal Docs
@@ -350,6 +357,13 @@ logging.basicConfig(level=logging.DEBUG)
 - **Duration-based adaptive configuration** 
 - **Preset configurations** for different content types
 - **Improved dependencies** (librosa, soundfile, torch)
+
+### Recent Improvements (v0.3.6)
+- **AI-Only Word Highlighting**: Removed fallback to hardcoded word lists, now uses intelligent AI analysis
+- **HTTP-Based API**: Replaced OpenAI client with direct HTTP calls for better compatibility
+- **Language-Aware Processing**: AI now detects language and avoids highlighting function words
+- **Context-Sensitive Analysis**: AI considers audience, theme, and message for word selection
+- **RedPill Template Enhancements**: Added proper highlight styling with yellow text on red backgrounds
 
 ### Planned Features
 - Test suite implementation

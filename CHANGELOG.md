@@ -5,6 +5,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.6] - 2025-01-03
+
+### 🧠 AI System Overhaul
+
+#### AI-Only Word Highlighting
+- **Removed manual fallback system** - No more hardcoded word lists that inappropriately highlighted Portuguese function words like "mais" and "sua"
+- **Language-aware processing** - AI now detects language and explicitly avoids highlighting common function words (articles, prepositions, pronouns)
+- **Context-sensitive analysis** - AI analyzes entire text holistically considering audience, theme, and message before selecting words
+- **Preset-driven intelligence** - AI receives specific guidance based on preset (minimal, balanced, aggressive, professional, entertainment)
+
+#### HTTP-Based AI Integration
+- **Replaced OpenAI client with direct HTTP calls** - Eliminates dependency conflicts and version compatibility issues
+- **Better error handling** - More specific HTTP error messages and timeout control
+- **Compatible with any OpenAI-compatible API** - Works with OpenAI, OpenRouter, or custom endpoints via `OPENAI_BASE_URL`
+- **Lighter dependencies** - Removed `openai` package dependency, now uses only `requests`
+- **Session management** - HTTP session reuse for better performance
+
+#### Intelligent Word Selection
+- **Holistic text analysis** - AI considers the complete context, not just individual words
+- **Cultural context awareness** - Understands what resonates with target audiences
+- **Preset-specific behavior** - Different highlighting strategies for different content types
+- **Quality filtering** - Avoids highlighting words that don't add meaningful emphasis
+
+### 🎨 Template Improvements
+
+#### RedPill Template Enhancement
+- **Added proper highlight styling** - Both `.word.highlight` and `.word.emphasis` classes now have distinct visual treatments
+- **Visual hierarchy** - Emphasis words (gold text, bright red background) vs Highlight words (yellow text, dark red background)
+- **Enhanced animations** - Added `highlight-pulse` animation for medium-importance words
+- **Better contrast** - Yellow text on dark red provides better readability than white text
+
+### 🐛 Bug Fixes
+- **Fixed AI highlighting not appearing** - RedPill template was missing CSS styles for `.word.highlight` class
+- **Resolved OpenAI API compatibility** - No more "ChatCompletion not supported" errors
+- **Portuguese function word filtering** - AI no longer highlights "mais", "sua", "de", "da", etc.
+
+### 🔧 Technical Improvements
+- **Removed dependency on openai package** - Cleaner dependency management
+- **HTTP request optimization** - Direct control over API timeouts and retries
+- **Enhanced error recovery** - Better handling of AI API failures
+- **Improved logging** - More detailed debugging information for AI decisions
+
 ## [0.3.5] - 2025-09-04
 
 ### 🎨 Template Improvements

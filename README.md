@@ -40,16 +40,17 @@ The best choice for **processing longer videos** with **maximum transcription qu
 
 ## Key Features
 
+*   **🧠 AI-Powered Word Highlighting** (v0.3.6): Intelligent context-aware word highlighting that analyzes content holistically, detects language, and avoids highlighting common function words. Now uses HTTP-based API for better compatibility.
 *   **🌍 English-to-Portuguese Translation** (v0.3.1): Professional-grade translation with DeepL and Google Translate integration, Portuguese-specific optimizations, and comprehensive quality validation.
 *   **🚀 Faster-Whisper Support** (v0.3.0): 4x faster transcription with 40% less memory usage and built-in anti-hallucination measures.
-*   **Template System**: Get started quickly with 14+ predefined templates. Create and share your own templates, packaging styles, animations, and configurations.
+*   **Template System**: Get started quickly with 14+ predefined templates including the enhanced RedPill template with proper highlight styling. Create and share your own templates, packaging styles, animations, and configurations.
 *   **CSS Styling**: Style subtitles using standard CSS. Target specific states like `.word-being-narrated` for dynamic effects, cleanly separating style from logic.
-*   **Word Tagging**: Tag words or phrases using regular expressions, word lists, or AI. These tags act as powerful selectors for applying custom CSS, effects, or animations.
+*   **Smart Word Selection**: AI analyzes entire text considering audience, theme, and message context. Supports preset-driven behavior (minimal, balanced, professional, entertainment).
 *   **Advanced Animations & Effects**: Bring words to life with a library of built-in animations (fades, pops, slides) and effects (typewriting, emoji insertion, sound effects).
 *   **Anti-Hallucination System** (v0.2.0+): Advanced transcription with VAD preprocessing and smart chunking for long videos.
 *   **SRT Import**: Skip transcription entirely by importing existing SRT subtitle files with intelligent word-level timing estimation.
 *   **Dual Interface**: Use it as a simple CLI for quick renders or as a comprehensive Python library for programmatic video creation.
-*   **Offline-First**: The core transcription, styling, and rendering engine runs entirely on your local machine. An internet connection is only needed for optional AI-powered features.
+*   **HTTP-Based AI Integration**: Direct HTTP calls to OpenAI-compatible APIs with no client dependency conflicts and support for custom endpoints like OpenRouter.
 
 ## Prerequisites
 

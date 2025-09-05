@@ -1,4 +1,4 @@
-from typing import List, Dict, Set
+from typing import List, Dict, Set, Optional
 from pycaps.common import Document, Word, Tag
 from pycaps.ai import LlmProvider
 from pycaps.logger import logger
@@ -12,10 +12,19 @@ class WordImportanceTagger:
     and key concepts to determine which words should be highlighted.
     """
 
-    def __init__(self):
+    def __init__(self, preset: Optional[str] = None, content_type: Optional[str] = None):
+        """
+        Initialize the AI-powered word importance tagger.
+        
+        Args:
+            preset: Enhancement preset (minimal, balanced, aggressive, professional, entertainment)
+            content_type: Type of content (general, educational, professional, entertainment)
+        """
         self._llm = LlmProvider.get()
         self.importance_tag = Tag("highlight")
         self.emphasis_tag = Tag("emphasis")
+        self.preset = preset or "balanced"
+        self.content_type = content_type or "general"
 
     def process(self, document: Document, max_highlighted_words: int = 5) -> None:
         """
@@ -64,35 +73,54 @@ class WordImportanceTagger:
         Returns a list of dictionaries with word importance data:
         [{"word": "amazing", "importance": 0.9, "reason": "emotional impact"}, ...]
         """
-        prompt = f"""Analyze the following text and identify the {max_words} most important words that should be highlighted for maximum visual impact and engagement.
+        # Detect language from the text
+        language_hint = self._detect_language_hint(text)
+        
+        # Get preset-specific guidance
+        preset_guidance = self._get_preset_guidance()
+        
+        prompt = f"""You are analyzing text for subtitle highlighting. Your task is to:
+1. First, identify the language of the text
+2. Identify the target audience based on the content
+3. Understand the main theme and message
+4. Select the {max_words} most impactful words for visual highlighting
 
-Consider these criteria for word importance:
-1. **Emotional Impact**: Words that evoke strong emotions (amazing, terrible, love, hate, etc.)
-2. **Key Actions**: Important verbs that drive the narrative (achieve, discover, transform, etc.)
-3. **Superlatives**: Words that express extremes (best, worst, first, only, never, always, etc.)
-4. **Numbers and Quantities**: Specific numbers, percentages, or quantities that add credibility
-5. **Power Words**: Words that grab attention and create urgency (breakthrough, secret, proven, etc.)
-6. **Core Concepts**: The main subject matter or key nouns central to the message
+Text to analyze:
+"{text}"
 
-Return ONLY a JSON array with the most important words, ordered by importance (highest first).
+Language detected: {language_hint}
+Preset: {self.preset}
+Content Type: {self.content_type}
 
-Format:
+{preset_guidance}
+
+IMPORTANT RULES FOR WORD SELECTION:
+- NEVER highlight common function words (articles, prepositions, common pronouns)
+- For Portuguese: avoid "mais", "sua", "seu", "seus", "suas", "de", "da", "do", "que", "para", "com", "em", "a", "o", "as", "os"
+- For English: avoid "the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for", "with", "of", "more", "your", "my"
+- Focus on words that carry the core meaning and emotional weight
+- Consider the cultural context and what resonates with the target audience
+- Highlight words that would naturally be emphasized in spoken delivery
+
+Analyze the text holistically. Consider:
+- What is the main message?
+- Who is the target audience?
+- What emotions should be conveyed?
+- Which words are truly essential to the meaning?
+
+Return ONLY a JSON array with the selected words:
 [
-  {{"word": "exact_word_from_text", "importance": 0.9, "reason": "emotional impact"}},
-  {{"word": "another_word", "importance": 0.8, "reason": "key action"}},
+  {{"word": "exact_word_from_text", "importance": 0.9, "reason": "core message"}},
+  {{"word": "another_word", "importance": 0.8, "reason": "emotional impact"}},
   ...
 ]
 
-Rules:
-- Use exact words as they appear in the text (preserve capitalization)
-- Only include single words, not phrases
+Requirements:
+- Use exact words as they appear in the text
+- Only include content words that add meaning
 - Importance score from 0.1 to 1.0
-- Provide a brief reason for each word's importance
-- Focus on words that would benefit from visual emphasis (bigger size, animation)
-- Avoid common words like "the", "and", "is", "are", etc.
-
-Text to analyze:
-{text}
+- Brief, specific reason for each selection
+- Maximum {max_words} words total
 
 JSON response:"""
 
@@ -178,6 +206,68 @@ JSON response:"""
         
         logger().info(f"Applied importance tags to {tagged_count} words")
 
+    def _detect_language_hint(self, text: str) -> str:
+        """Detect language hints from the text."""
+        portuguese_indicators = ["que", "de", "da", "do", "para", "com", "não", "está", "são", "tem", "mas", "por"]
+        spanish_indicators = ["que", "de", "la", "el", "en", "y", "es", "por", "con", "para", "una", "los"]
+        french_indicators = ["le", "de", "la", "et", "les", "des", "est", "pour", "dans", "que", "une", "avec"]
+        
+        text_lower = text.lower()
+        words = text_lower.split()
+        
+        # Count indicators
+        pt_count = sum(1 for word in words if word in portuguese_indicators)
+        es_count = sum(1 for word in words if word in spanish_indicators)
+        fr_count = sum(1 for word in words if word in french_indicators)
+        
+        # Simple heuristic
+        if pt_count > es_count and pt_count > fr_count and pt_count > 3:
+            return "Portuguese"
+        elif es_count > pt_count and es_count > fr_count and es_count > 3:
+            return "Spanish"
+        elif fr_count > pt_count and fr_count > es_count and fr_count > 3:
+            return "French"
+        else:
+            return "English (default)"
+    
+    def _get_preset_guidance(self) -> str:
+        """Get preset-specific guidance for the AI."""
+        presets = {
+            "minimal": """MINIMAL PRESET:
+- Select only 2-3 absolutely essential words
+- Focus on the single core concept or action
+- Prefer nouns and verbs that define the message
+- Very conservative selection""",
+            
+            "balanced": """BALANCED PRESET:
+- Select 4-5 key words that drive the message
+- Mix of emotional words, key concepts, and important actions
+- Include one powerful opener if present
+- Maintain good rhythm throughout the text""",
+            
+            "aggressive": """AGGRESSIVE PRESET:
+- Select 6-8 high-impact words
+- Prioritize emotional triggers and power words
+- Include numbers, superlatives, and strong verbs
+- Create visual dynamism with frequent highlights""",
+            
+            "professional": """PROFESSIONAL PRESET:
+- Select 2-3 business-critical terms only
+- Focus on metrics, outcomes, and key concepts
+- Avoid emotional language unless data-driven
+- Highlight expertise and credibility markers
+- Keep it subtle and authoritative""",
+            
+            "entertainment": """ENTERTAINMENT PRESET:
+- Select 5-7 engaging, fun words
+- Prioritize surprises, emotions, and energy
+- Include exclamations and cultural references
+- Create a dynamic viewing experience
+- Focus on words that pop visually"""
+        }
+        
+        return presets.get(self.preset, presets["balanced"])
+    
     def get_supported_tags(self) -> Set[Tag]:
         """Return the tags this tagger can apply."""
         return {self.importance_tag, self.emphasis_tag}
