@@ -77,6 +77,20 @@ pycaps is currently in a very alpha stage and is not yet available on PyPI. You 
     playwright install chromium
     ```
 
+4.  **Configure Environment Variables (Optional):**
+    For AI-powered features and translation services, copy the sample environment file and add your API keys:
+    ```bash
+    cp .env.sample .env
+    # Edit .env with your API keys
+    ```
+    
+    Key environment variables:
+    - `OPENAI_API_KEY`: For AI-powered features (tagging, summarization, word highlighting)
+    - `DEEPL_API_KEY`: For high-quality DeepL translations
+    - `GOOGLE_APPLICATION_CREDENTIALS`: For Google Cloud Speech API
+    
+    See `.env.sample` for all available configuration options.
+
 > ⚠️ **Note**: The first time you use `pycaps`, it will download the transcription model (Whisper or Faster-Whisper). This may take a few minutes and only happens once.
 
 ## Quick Start

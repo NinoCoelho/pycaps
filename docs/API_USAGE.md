@@ -33,7 +33,18 @@ If you prefer to use your own OpenAI account and billing, you can provide your o
 
 ### How to set up:
 
-You must set an environment variable named `OPENAI_API_KEY`.
+You can either set environment variables directly or use the provided `.env.sample` file:
+
+**Method 1: Using .env file (Recommended):**
+```bash
+# Copy the sample environment file
+cp .env.sample .env
+
+# Edit .env and add your API keys
+# Set OPENAI_API_KEY="sk-YourOpenAIKeyHere"
+```
+
+**Method 2: Direct environment variables:**
 
 **On macOS/Linux:**
 ```bash
@@ -46,6 +57,15 @@ You can add this line to your shell profile (e.g., `~/.zshrc`, `~/.bash_profile`
 setx OPENAI_API_KEY "sk-YourOpenAIKeyHere"
 ```
 You may need to restart your terminal for the change to take effect.
+
+### Additional Configuration Options:
+
+- **Custom API Endpoint**: Use `OPENAI_BASE_URL` for OpenRouter or other OpenAI-compatible APIs
+- **Model Selection**: Set `PYCAPS_AI_MODEL` (default: gpt-4o-mini)
+- **Translation Services**: Configure `DEEPL_API_KEY` for DeepL translations
+- **Google Cloud**: Set `GOOGLE_APPLICATION_CREDENTIALS` for Google Speech API
+
+See `.env.sample` for all available configuration options.
 
 ## How Pycaps Prioritizes Keys
 
