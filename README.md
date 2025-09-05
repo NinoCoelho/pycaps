@@ -86,6 +86,7 @@ pycaps is currently in a very alpha stage and is not yet available on PyPI. You 
     
     Key environment variables:
     - `OPENAI_API_KEY`: For AI-powered features (tagging, summarization, word highlighting)
+    - `OPENAI_BASE_URL`: Custom API endpoint for OpenRouter or OpenAI-compatible APIs (optional)
     - `DEEPL_API_KEY`: For high-quality DeepL translations
     - `GOOGLE_APPLICATION_CREDENTIALS`: For Google Cloud Speech API
     
