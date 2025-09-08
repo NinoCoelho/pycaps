@@ -21,7 +21,8 @@
 
 /* Emphasis words (high importance) */
 .word.emphasis.word-being-narrated {
-    font-size: 5vw !important;
+    /* Keep original font size to maintain layout */
+    font-size: 3.5vw !important;
     background-color: #ff0000 !important;  /* Brighter red for emphasis */
     color: #FFD700 !important;  /* Gold text */
     border-radius: 1.5vw;
@@ -30,18 +31,31 @@
         0 0 2vw #ff0000,
         0 0.3vw 0.6vw rgba(0, 0, 0, 0.9);
     animation: emphasis-glow 1.5s ease-in-out infinite alternate;
+    /* Use transform to scale visually without affecting layout */
+    transform: scale(1.4);
+    transform-origin: center;
+    /* Ensure it appears above other elements */
+    position: relative;
+    z-index: 10;
 }
 
 /* Also style emphasized words in other states */
 .word.emphasis.word-not-narrated-yet,
 .word.emphasis.word-already-narrated {
-    font-size: 4vw !important;
+    /* Keep base font size */
+    font-size: 3.5vw !important;
     color: #ffffff !important;
+    /* Subtle transform for preview */
+    transform: scale(1.1);
+    transform-origin: center;
+    position: relative;
+    z-index: 5;
 }
 
 /* Highlight words (medium importance) */
 .word.highlight.word-being-narrated {
-    font-size: 4.2vw !important;
+    /* Keep original font size to maintain layout */
+    font-size: 3.5vw !important;
     background-color: #cc3300 !important;  /* Darker red for highlight */
     color: #ffff00 !important;  /* Yellow text */
     border-radius: 1.25vw;
@@ -50,13 +64,24 @@
         0 0 1.5vw #ffff00,
         0 0.2vw 0.4vw rgba(0, 0, 0, 0.8);
     animation: highlight-pulse 2s ease-in-out infinite;
+    /* Use transform to scale visually without affecting layout */
+    transform: scale(1.2);
+    transform-origin: center;
+    position: relative;
+    z-index: 8;
 }
 
 /* Also style highlight words in other states */
 .word.highlight.word-not-narrated-yet,
 .word.highlight.word-already-narrated {
-    font-size: 3.8vw !important;
+    /* Keep base font size */
+    font-size: 3.5vw !important;
     color: #ffff99 !important;  /* Light yellow tint */
+    /* Subtle transform for preview */
+    transform: scale(1.05);
+    transform-origin: center;
+    position: relative;
+    z-index: 3;
 }
 
 /* Animations */
@@ -64,24 +89,26 @@
     0% { 
         opacity: 1;
         box-shadow: 0 0 1vw rgba(255,0,0,0.5);
+        transform: scale(1.4);
     }
     100% { 
         opacity: 0.9;
         box-shadow: 0 0 2vw rgba(255,0,0,0.8);
+        transform: scale(1.45);
     }
 }
 
 @keyframes highlight-pulse {
     0% { 
-        transform: scale(1);
+        transform: scale(1.2);
         box-shadow: 0 0 0.8vw rgba(204,51,0,0.4);
     }
     50% { 
-        transform: scale(1.02);
+        transform: scale(1.25);
         box-shadow: 0 0 1.2vw rgba(204,51,0,0.7);
     }
     100% { 
-        transform: scale(1);
+        transform: scale(1.2);
         box-shadow: 0 0 0.8vw rgba(204,51,0,0.4);
     }
 }
