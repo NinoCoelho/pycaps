@@ -319,7 +319,14 @@ logging.basicConfig(level=logging.DEBUG)
 
 ## Project Roadmap
 
-### Current Version: 0.3.7 (Alpha)
+### Current Version: 0.3.8 (Alpha)
+
+### New in v0.3.8
+- **RedPill Template Highlighting Spacing Fix** - Fixed spacing issues where highlighted words were pushed to new lines
+- **Consistent Padding for Highlighted Words** - All highlighted states now use the same padding as base words (0.6vw 0.4vw)
+- **Reduced Transform Scale Values** - Minimal scaling (1.1x for emphasis, 1.05x for highlights) to prevent layout disruption
+- **Manual Highlighting Fallback** - Added ManualWordTagger fallback when AI is not available for testing purposes
+- **Portuguese Highlighting Support** - Manual tagger now supports Portuguese content for comprehensive testing
 
 ### New in v0.3.7
 - **AI Word Highlighting Spacing Fix** - Fixed RedPill template spacing issues where highlighted words pushed adjacent text away
@@ -397,4 +404,4 @@ logging.basicConfig(level=logging.DEBUG)
 5. Submit PR with clear description
 
 ---
-*pycaps v0.3.7 | CSS-styled video subtitles | Fixed AI word spacing | Transform-based highlighting | English-to-Portuguese translation | Faster-Whisper integration*
+*pycaps v0.3.8 | CSS-styled video subtitles | Fixed highlighting spacing issues | Transform-based highlighting | English-to-Portuguese translation | Faster-Whisper integration*
