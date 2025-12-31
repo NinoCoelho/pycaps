@@ -41,21 +41,20 @@
 
 /* First word needs extra padding for drop cap */
 .word.first-word-in-segment {
-    padding: 1.5vw 0.4vw 0.6vw 0.4vw;
+    padding: 1vw 0.4vw 0.6vw 0.4vw;
     overflow: visible;
-    margin-left: 1vw;
-    margin-top: 0.5vw;
+    margin-top: 0.3vw;
 }
 
 /* First letter of first word - DROP CAP with WrathStyles */
 .word.first-word-in-segment::first-letter {
     font-family: 'WrathStyles', serif;
-    font-size: 12vw;
+    font-size: 10vw;
     float: left;
-    line-height: 0.9;
-    margin-right: 0.4vw;
-    margin-top: -1vw;
-    margin-left: -1.5vw;
+    line-height: 1;
+    margin-right: 0.15vw;
+    margin-top: -0.2vw;
+    margin-left: -0.2vw;
     color: white;
     text-transform: uppercase;
     /* Enhanced black border for drop cap */
