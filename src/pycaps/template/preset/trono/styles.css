@@ -15,7 +15,7 @@
     font-style: normal;
 }
 
-/* Base word styling */
+/* Base word styling - All words use Marcellus */
 .word {
     font-family: 'Marcellus', serif;
     font-size: 3.5vw;
@@ -30,25 +30,25 @@
         0 0.25vw 0.5vw rgba(0, 0, 0, 0.8);
     transition: all 0.3s ease;
     display: inline-block;
+    line-height: 1.2;
 }
 
-/* Drop cap styling - First word of each segment */
-.word.first-word-in-segment {
+/* First letter of first word - DROP CAP with WrathStyles */
+.word.first-word-in-segment::first-letter {
     font-family: 'WrathStyles', serif;
-    font-size: 6vw;
+    font-size: 7vw;
+    float: left;
+    line-height: 0.8;
+    margin-right: 0.3vw;
+    margin-top: 0.1vw;
     color: white;
-    padding: 0.6vw 0.4vw;
-    /* Enhanced black border for drop caps */
+    /* Enhanced black border for drop cap */
     text-shadow:
         -2px -2px 0 black,
         2px -2px 0 black,
         -2px 2px 0 black,
         2px 2px 0 black,
         0 0.3vw 0.6vw rgba(0, 0, 0, 0.9);
-    float: left;
-    margin-right: 0.3vw;
-    margin-top: 0.2vw;
-    line-height: 1;
 }
 
 /* Word narration states */
@@ -65,9 +65,8 @@
     opacity: 0.9;
 }
 
-/* Drop cap narration state */
-.word.first-word-in-segment.word-being-narrated {
-    background-color: rgba(255, 0, 0, 0.25);
+/* First letter narration state - golden glow */
+.word.first-word-in-segment.word-being-narrated::first-letter {
     color: #FFD700;
     text-shadow:
         -2px -2px 0 black,
@@ -106,6 +105,12 @@
     z-index: 5;
 }
 
+/* First letter of emphasized word */
+.word.emphasis::first-letter {
+    color: inherit;
+    text-shadow: inherit;
+}
+
 /* AI Word Highlighting - Highlight (medium importance) */
 .word.highlight.word-being-narrated {
     background-color: #ff0000 !important;
@@ -132,6 +137,12 @@
     padding: 0.6vw 0.4vw !important;
     position: relative;
     z-index: 3;
+}
+
+/* First letter of highlighted word */
+.word.highlight::first-letter {
+    color: inherit;
+    text-shadow: inherit;
 }
 
 /* Glowing animation for highlighted words */
