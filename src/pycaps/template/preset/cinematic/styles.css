@@ -68,7 +68,7 @@
 .word.emphasis.word-being-narrated {
     color: #FFD700 !important;
     font-weight: 700;
-    padding: 0.5vw 0.6vw !important;
+    padding: 0.7vw 0.8vw !important;
     text-shadow:
         0 1px 2px rgba(0, 0, 0, 0.9),
         0 0.3vw 0.6vw rgba(255, 215, 0, 0.6),
@@ -82,7 +82,7 @@
 .word.emphasis.word-already-narrated {
     color: #e6dbac !important;
     font-weight: 700;
-    padding: 0.5vw 0.6vw !important;
+    padding: 0.7vw 0.8vw !important;
     position: relative;
     z-index: 5;
 }
