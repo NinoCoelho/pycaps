@@ -3,14 +3,14 @@
 /* Font Face Declarations */
 @font-face {
     font-family: 'WrathStyles';
-    src: url('resources/WrathStyles.ttf') format('truetype');
+    src: local('Wrath Styles'), url('resources/WrathStyles.ttf');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Marcellus';
-    src: url('resources/Marcellus-Regular.ttf') format('truetype');
+    src: url('resources/Marcellus-Regular.ttf');
     font-weight: normal;
     font-style: normal;
 }
