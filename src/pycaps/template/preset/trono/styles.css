@@ -39,22 +39,23 @@
     position: relative;
 }
 
-/* First word needs extra padding for drop cap */
+/* First word needs extra padding for medieval drop cap with decorative elements */
 .word.first-word-in-segment {
-    padding: 1vw 0.4vw 0.6vw 0.4vw;
+    padding: 2vw 0.4vw 0.6vw 1.5vw;
     overflow: visible;
     margin-top: 0.3vw;
+    margin-left: -1vw;
 }
 
-/* First letter of first word - DROP CAP with WrathStyles */
+/* First letter of first word - DROP CAP with WrathStyles medieval font */
 .word.first-word-in-segment::first-letter {
     font-family: 'WrathStyles', serif;
     font-size: 10vw;
     float: left;
     line-height: 1;
     margin-right: 0.15vw;
-    margin-top: -0.2vw;
-    margin-left: -0.2vw;
+    margin-top: -1.5vw;
+    margin-left: -1.5vw;
     color: white;
     text-transform: uppercase;
     /* Enhanced black border for drop cap */
