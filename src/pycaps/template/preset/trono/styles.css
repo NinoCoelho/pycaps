@@ -1,13 +1,6 @@
-/* Trono Template - Drop Caps with Dual Font Styling */
+/* Trono Template - Medieval Style with Marcellus Font */
 
 /* Font Face Declarations */
-@font-face {
-    font-family: 'WrathStyles';
-    src: local('Wrath Styles'), url('resources/WrathStyles.ttf');
-    font-weight: normal;
-    font-style: normal;
-}
-
 @font-face {
     font-family: 'Marcellus';
     src: url('resources/Marcellus-Regular.ttf');
@@ -39,38 +32,6 @@
     position: relative;
 }
 
-/* First word needs extra padding for medieval drop cap with decorative elements */
-.word.first-word-in-segment {
-    padding: 0.8vw 0.4vw 0.6vw 0.4vw;
-    overflow: visible;
-}
-
-/* First letter of first word - DROP CAP with WrathStyles medieval font */
-.word.first-word-in-segment::first-letter {
-    font-family: 'WrathStyles', serif;
-    font-size: 7vw;
-    float: left;
-    line-height: 1;
-    margin-right: 0.3vw;
-    color: white;
-    text-transform: uppercase;
-    /* Enhanced black border for drop cap */
-    text-shadow:
-        -3px -3px 0 black,
-        3px -3px 0 black,
-        -3px 3px 0 black,
-        3px 3px 0 black,
-        -4px -4px 2px black,
-        4px -4px 2px black,
-        -4px 4px 2px black,
-        4px 4px 2px black,
-        0 0.5vw 1vw rgba(0, 0, 0, 0.95);
-    display: inline-block;
-    overflow: visible;
-    position: relative;
-    z-index: 1;
-}
-
 /* Word narration states */
 .word-being-narrated {
     color: #FFD700;
@@ -82,22 +43,6 @@
 
 .word-not-narrated-yet {
     opacity: 0.95;
-}
-
-/* First letter narration state - golden glow */
-.word.first-word-in-segment.word-being-narrated::first-letter {
-    color: #FFD700;
-    text-shadow:
-        -3px -3px 0 black,
-        3px -3px 0 black,
-        -3px 3px 0 black,
-        3px 3px 0 black,
-        -4px -4px 2px black,
-        4px -4px 2px black,
-        -4px 4px 2px black,
-        4px 4px 2px black,
-        0 0 1vw rgba(255, 215, 0, 0.6),
-        0 0.5vw 1vw rgba(0, 0, 0, 0.95);
 }
 
 /* AI Word Highlighting - Emphasis (high importance) */
@@ -129,12 +74,6 @@
     z-index: 5;
 }
 
-/* First letter of emphasized word */
-.word.emphasis::first-letter {
-    color: inherit;
-    text-shadow: inherit;
-}
-
 /* AI Word Highlighting - Highlight (medium importance) */
 .word.highlight.word-being-narrated {
     color: #FFFF00 !important;
@@ -162,12 +101,6 @@
     font-size: 5vw !important;
     position: relative;
     z-index: 3;
-}
-
-/* First letter of highlighted word */
-.word.highlight::first-letter {
-    color: inherit;
-    text-shadow: inherit;
 }
 
 /* Glowing animation for highlighted words */
