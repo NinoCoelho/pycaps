@@ -34,6 +34,8 @@
 
 /* Word narration states */
 .word-being-narrated {
+    background-color: #e41f23;
+    border-radius: 1.25vw;
     color: #FFD700;
 }
 
@@ -47,19 +49,14 @@
 
 /* AI Word Highlighting - Emphasis (high importance) */
 .word.emphasis.word-being-narrated {
+    background-color: #ff0000 !important;
     color: #FFD700 !important;
     font-size: 5vw !important;
+    padding: 0.6vw 0.4vw !important;
+    border-radius: 1.25vw;
     text-shadow:
-        -2px -2px 0 black,
-        2px -2px 0 black,
-        -2px 2px 0 black,
-        2px 2px 0 black,
-        -3px -3px 2px black,
-        3px -3px 2px black,
-        -3px 3px 2px black,
-        3px 3px 2px black,
-        0 0 2vw rgba(255, 215, 0, 0.8),
-        0 0.5vw 1vw rgba(0, 0, 0, 0.9);
+        0 0 2vw #ff0000,
+        0 0.3vw 0.6vw rgba(0, 0, 0, 0.9);
     transform: scale(1.1);
     transform-origin: center;
     position: relative;
@@ -68,27 +65,25 @@
 
 .word.emphasis.word-not-narrated-yet,
 .word.emphasis.word-already-narrated {
+    background-color: #cc0000 !important;
     color: #ffeeb0 !important;
     font-size: 5vw !important;
+    padding: 0.6vw 0.4vw !important;
+    border-radius: 1.25vw;
     position: relative;
     z-index: 5;
 }
 
 /* AI Word Highlighting - Highlight (medium importance) */
 .word.highlight.word-being-narrated {
+    background-color: #cc3300 !important;
     color: #FFFF00 !important;
     font-size: 5vw !important;
+    padding: 0.6vw 0.4vw !important;
+    border-radius: 1.25vw;
     text-shadow:
-        -2px -2px 0 black,
-        2px -2px 0 black,
-        -2px 2px 0 black,
-        2px 2px 0 black,
-        -3px -3px 2px black,
-        3px -3px 2px black,
-        -3px 3px 2px black,
-        3px 3px 2px black,
-        0 0 1.5vw rgba(255, 255, 0, 0.6),
-        0 0.5vw 1vw rgba(0, 0, 0, 0.9);
+        0 0 1.5vw #ffff00,
+        0 0.2vw 0.4vw rgba(0, 0, 0, 0.8);
     transform: scale(1.05);
     transform-origin: center;
     position: relative;
@@ -97,8 +92,11 @@
 
 .word.highlight.word-not-narrated-yet,
 .word.highlight.word-already-narrated {
+    background-color: #992200 !important;
     color: #ffffcc !important;
     font-size: 5vw !important;
+    padding: 0.6vw 0.4vw !important;
+    border-radius: 1.25vw;
     position: relative;
     z-index: 3;
 }
@@ -107,28 +105,27 @@
 @keyframes trono-emphasis-glow {
     0% {
         opacity: 1;
-    }
-    50% {
-        opacity: 0.9;
+        box-shadow: 0 0 1vw rgba(255, 0, 0, 0.5);
     }
     100% {
-        opacity: 1;
+        opacity: 0.9;
+        box-shadow: 0 0 2vw rgba(255, 0, 0, 0.8);
     }
 }
 
 .word.emphasis.word-being-narrated {
-    animation: trono-emphasis-glow 2s ease-in-out infinite;
+    animation: trono-emphasis-glow 1.5s ease-in-out infinite alternate;
 }
 
 @keyframes trono-highlight-pulse {
     0% {
-        opacity: 1;
+        box-shadow: 0 0 0.8vw rgba(204, 51, 0, 0.4);
     }
     50% {
-        opacity: 0.85;
+        box-shadow: 0 0 1.2vw rgba(204, 51, 0, 0.7);
     }
     100% {
-        opacity: 1;
+        box-shadow: 0 0 0.8vw rgba(204, 51, 0, 0.4);
     }
 }
 
