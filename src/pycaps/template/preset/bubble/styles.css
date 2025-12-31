@@ -1,0 +1,201 @@
+/* Bubble Template - Comic Speech Bubble Style */
+
+/* Font Face Declarations */
+@font-face {
+    font-family: 'Quicksand';
+    src: url('resources/Quicksand.ttf') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Quicksand';
+    src: url('resources/Quicksand-Bold.ttf') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+/* Base word styling - speech bubble appearance */
+.word {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 3.8vw;
+    font-weight: 700;
+    color: #222;
+    padding: 0.8vw 1vw;
+    /* Speech bubble appearance */
+    background: white;
+    border: 0.25vw solid #000;
+    border-radius: 2vw;
+    margin: 0.2vw;
+    display: inline-block;
+    box-shadow:
+        0.2vw 0.2vw 0 rgba(0, 0, 0, 0.2),
+        inset 0 0.1vw 0.2vw rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+/* Pop-in bounce animation */
+@keyframes bubble-pop-in {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    50% {
+        transform: scale(1.15);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.word {
+    animation: bubble-pop-in 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Word narration states */
+.word-being-narrated {
+    background: #FFE135;
+    border-color: #000;
+    transform: scale(1.1);
+    box-shadow:
+        0.3vw 0.3vw 0 rgba(0, 0, 0, 0.3),
+        inset 0 0.1vw 0.2vw rgba(255, 225, 53, 0.3);
+    animation: bubble-pop-in 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55),
+               bubble-bounce 0.6s ease-in-out infinite;
+}
+
+.word-already-narrated {
+    background: #F0F0F0;
+    opacity: 0.75;
+    transform: scale(0.95);
+}
+
+.word-not-narrated-yet {
+    background: white;
+    opacity: 0.9;
+}
+
+/* Bounce animation for narrated words */
+@keyframes bubble-bounce {
+    0%, 100% {
+        transform: scale(1.1) translateY(0);
+    }
+    50% {
+        transform: scale(1.12) translateY(-0.2vw);
+    }
+}
+
+/* AI Word Highlighting - Emphasis (high importance) */
+.word.emphasis.word-being-narrated {
+    background: #FF6B6B !important;
+    color: white !important;
+    font-size: 4.2vw !important;
+    padding: 0.9vw 1.1vw !important;
+    border-color: #000 !important;
+    border-width: 0.3vw;
+    box-shadow:
+        0.4vw 0.4vw 0 rgba(255, 107, 107, 0.4),
+        inset 0 0.1vw 0.2vw rgba(255, 255, 255, 0.3);
+    transform: scale(1.15);
+    position: relative;
+    z-index: 10;
+    animation: bubble-pop-in 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55),
+               bubble-emphasis-pulse 1s ease-in-out infinite;
+}
+
+.word.emphasis.word-not-narrated-yet,
+.word.emphasis.word-already-narrated {
+    background: #FFB3B3 !important;
+    color: #222 !important;
+    font-size: 3.8vw !important;
+    padding: 0.8vw 1vw !important;
+    position: relative;
+    z-index: 5;
+    border-color: #000 !important;
+}
+
+/* AI Word Highlighting - Highlight (medium importance) */
+.word.highlight.word-being-narrated {
+    background: #4ECDC4 !important;
+    color: white !important;
+    font-size: 4vw !important;
+    padding: 0.85vw 1.05vw !important;
+    border-color: #000 !important;
+    box-shadow:
+        0.3vw 0.3vw 0 rgba(78, 205, 196, 0.4),
+        inset 0 0.1vw 0.2vw rgba(255, 255, 255, 0.3);
+    transform: scale(1.08);
+    position: relative;
+    z-index: 8;
+    animation: bubble-pop-in 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55),
+               bubble-highlight-bounce 1.2s ease-in-out infinite;
+}
+
+.word.highlight.word-not-narrated-yet,
+.word.highlight.word-already-narrated {
+    background: #B3E8E3 !important;
+    color: #222 !important;
+    font-size: 3.8vw !important;
+    padding: 0.8vw 1vw !important;
+    position: relative;
+    z-index: 3;
+    border-color: #000 !important;
+}
+
+/* Emphasis pulse animation */
+@keyframes bubble-emphasis-pulse {
+    0%, 100% {
+        transform: scale(1.15);
+        box-shadow:
+            0.4vw 0.4vw 0 rgba(255, 107, 107, 0.4),
+            inset 0 0.1vw 0.2vw rgba(255, 255, 255, 0.3);
+    }
+    50% {
+        transform: scale(1.18);
+        box-shadow:
+            0.5vw 0.5vw 0 rgba(255, 107, 107, 0.5),
+            inset 0 0.1vw 0.2vw rgba(255, 255, 255, 0.4);
+    }
+}
+
+/* Highlight bounce animation */
+@keyframes bubble-highlight-bounce {
+    0%, 100% {
+        transform: scale(1.08);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* Colorful pastel variations for random highlights */
+.word.pastel-1 {
+    background: #FFB3BA;
+    border-color: #000;
+}
+
+.word.pastel-2 {
+    background: #BAFFC9;
+    border-color: #000;
+}
+
+.word.pastel-3 {
+    background: #BAE1FF;
+    border-color: #000;
+}
+
+.word.pastel-4 {
+    background: #FFFFBA;
+    border-color: #000;
+}
+
+.word.pastel-5 {
+    background: #FFDFBA;
+    border-color: #000;
+}
+
+.word.pastel-6 {
+    background: #E0BBE4;
+    border-color: #000;
+}

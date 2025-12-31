@@ -1,0 +1,214 @@
+/* Neon Template - 80s Synthwave Style */
+
+/* Font Face Declaration */
+@font-face {
+    font-family: 'Righteous';
+    src: url('resources/Righteous.ttf') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Base word styling - neon tube effect */
+.word {
+    font-family: 'Righteous', sans-serif;
+    font-size: 4vw;
+    color: #FF00FF;
+    padding: 0.6vw 0.5vw;
+    /* Multi-layered neon glow - hot pink */
+    text-shadow:
+        0 0 0.1vw #fff,
+        0 0 0.2vw #fff,
+        0 0 0.3vw #FF00FF,
+        0 0 0.4vw #FF00FF,
+        0 0 0.7vw #FF00FF,
+        0 0 1vw #FF00FF,
+        0 0 1.5vw #FF00FF,
+        0 0 2vw #FF00FF;
+    transition: all 0.2s ease;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Random flicker animation for authentic neon effect */
+@keyframes neon-flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        opacity: 1;
+        text-shadow:
+            0 0 0.1vw #fff,
+            0 0 0.2vw #fff,
+            0 0 0.3vw #FF00FF,
+            0 0 0.4vw #FF00FF,
+            0 0 0.7vw #FF00FF,
+            0 0 1vw #FF00FF,
+            0 0 1.5vw #FF00FF,
+            0 0 2vw #FF00FF;
+    }
+    20%, 24%, 55% {
+        opacity: 0.8;
+        text-shadow:
+            0 0 0.1vw #fff,
+            0 0 0.2vw #fff,
+            0 0 0.2vw #FF00FF,
+            0 0 0.3vw #FF00FF,
+            0 0 0.5vw #FF00FF,
+            0 0 0.7vw #FF00FF,
+            0 0 1vw #FF00FF;
+    }
+}
+
+.word {
+    animation: neon-flicker 4s infinite;
+}
+
+/* Word narration states - cyan color shift */
+.word-being-narrated {
+    color: #00FFFF;
+    text-shadow:
+        0 0 0.1vw #fff,
+        0 0 0.2vw #fff,
+        0 0 0.3vw #00FFFF,
+        0 0 0.4vw #00FFFF,
+        0 0 0.7vw #00FFFF,
+        0 0 1vw #00FFFF,
+        0 0 1.5vw #00FFFF,
+        0 0 2vw #00FFFF;
+}
+
+.word-already-narrated {
+    color: #CC00CC;
+    opacity: 0.7;
+}
+
+.word-not-narrated-yet {
+    color: #FF66FF;
+}
+
+/* AI Word Highlighting - Emphasis (high importance) */
+.word.emphasis.word-being-narrated {
+    color: #FFFF00 !important;
+    font-size: 4.5vw !important;
+    padding: 0.6vw 0.5vw !important;
+    /* Intense yellow neon glow */
+    text-shadow:
+        0 0 0.1vw #fff,
+        0 0 0.2vw #fff,
+        0 0 0.3vw #FFFF00,
+        0 0 0.4vw #FFFF00,
+        0 0 0.7vw #FFFF00,
+        0 0 1vw #FFFF00,
+        0 0 1.5vw #FFFF00,
+        0 0 2.5vw #FFFF00,
+        0 0 3vw #FFFF00;
+    transform: scale(1.1);
+    transform-origin: center;
+    position: relative;
+    z-index: 10;
+    animation: neon-emphasis-glow 1.5s ease-in-out infinite alternate;
+}
+
+.word.emphasis.word-not-narrated-yet,
+.word.emphasis.word-already-narrated {
+    color: #FFCC00 !important;
+    font-size: 4vw !important;
+    padding: 0.6vw 0.5vw !important;
+    position: relative;
+    z-index: 5;
+    text-shadow:
+        0 0 0.1vw #fff,
+        0 0 0.2vw #fff,
+        0 0 0.3vw #FFCC00,
+        0 0 0.4vw #FFCC00,
+        0 0 0.7vw #FFCC00,
+        0 0 1vw #FFCC00;
+}
+
+/* AI Word Highlighting - Highlight (medium importance) */
+.word.highlight.word-being-narrated {
+    color: #00FFFF !important;
+    font-size: 4.2vw !important;
+    padding: 0.6vw 0.5vw !important;
+    /* Bright cyan glow */
+    text-shadow:
+        0 0 0.1vw #fff,
+        0 0 0.2vw #fff,
+        0 0 0.3vw #00FFFF,
+        0 0 0.4vw #00FFFF,
+        0 0 0.7vw #00FFFF,
+        0 0 1vw #00FFFF,
+        0 0 1.5vw #00FFFF,
+        0 0 2.5vw #00FFFF;
+    transform: scale(1.05);
+    transform-origin: center;
+    position: relative;
+    z-index: 8;
+    animation: neon-highlight-pulse 2s ease-in-out infinite;
+}
+
+.word.highlight.word-not-narrated-yet,
+.word.highlight.word-already-narrated {
+    color: #66FFFF !important;
+    font-size: 4vw !important;
+    padding: 0.6vw 0.5vw !important;
+    position: relative;
+    z-index: 3;
+    text-shadow:
+        0 0 0.1vw #fff,
+        0 0 0.2vw #fff,
+        0 0 0.3vw #00FFFF,
+        0 0 0.4vw #00FFFF,
+        0 0 0.7vw #00FFFF;
+}
+
+/* Neon emphasis glow animation */
+@keyframes neon-emphasis-glow {
+    0% {
+        opacity: 1;
+        filter: brightness(1);
+    }
+    100% {
+        opacity: 0.95;
+        filter: brightness(1.2);
+    }
+}
+
+/* Neon highlight pulse animation */
+@keyframes neon-highlight-pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.85;
+    }
+}
+
+/* Synthwave grid background effect (optional) */
+.subtitle-container {
+    position: relative;
+}
+
+.subtitle-container::before {
+    content: '';
+    position: absolute;
+    top: -5vw;
+    left: -10vw;
+    right: -10vw;
+    bottom: -5vw;
+    background:
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 0.4vw,
+            rgba(255, 0, 255, 0.03) 0.4vw,
+            rgba(255, 0, 255, 0.03) 0.8vw
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 0.4vw,
+            rgba(0, 255, 255, 0.03) 0.4vw,
+            rgba(0, 255, 255, 0.03) 0.8vw
+        );
+    pointer-events: none;
+    z-index: -1;
+}

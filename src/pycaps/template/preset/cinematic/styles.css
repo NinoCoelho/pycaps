@@ -1,0 +1,176 @@
+/* Cinematic Template - Film Letterbox Style */
+
+/* Font Face Declarations */
+@font-face {
+    font-family: 'PlayfairDisplay';
+    src: url('resources/PlayfairDisplay.ttf') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'PlayfairDisplay';
+    src: url('resources/PlayfairDisplay-Bold.ttf') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+/* Cinematic letterbox framing */
+.subtitle-container {
+    position: relative;
+    padding: 3vw 0;
+}
+
+/* Letterbox bars effect */
+.subtitle-container::before,
+.subtitle-container::after {
+    content: '';
+    position: absolute;
+    left: -10vw;
+    right: -10vw;
+    height: 2vw;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.3), transparent);
+    pointer-events: none;
+}
+
+.subtitle-container::before {
+    top: -1vw;
+}
+
+.subtitle-container::after {
+    bottom: -1vw;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.3), transparent);
+}
+
+/* Base word styling - elegant serif */
+.word {
+    font-family: 'PlayfairDisplay', Georgia, serif;
+    font-size: 4vw;
+    font-weight: 400;
+    color: white;
+    padding: 0.5vw 0.6vw;
+    /* Subtle shadow for readability */
+    text-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.8),
+        0 0.15vw 0.3vw rgba(0, 0, 0, 0.5);
+    letter-spacing: 0.02em;
+    transition: all 0.4s ease;
+    display: inline-block;
+}
+
+/* Word narration states */
+.word-being-narrated {
+    color: #FFD700;
+    text-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.8),
+        0 0.2vw 0.4vw rgba(255, 215, 0, 0.4),
+        0 0 1vw rgba(255, 215, 0, 0.2);
+}
+
+.word-already-narrated {
+    opacity: 0.85;
+    color: #f0f0f0;
+}
+
+.word-not-narrated-yet {
+    opacity: 0.95;
+}
+
+/* AI Word Highlighting - Emphasis (high importance) */
+.word.emphasis.word-being-narrated {
+    color: #FFD700 !important;
+    font-weight: 700;
+    font-size: 4.2vw !important;
+    padding: 0.5vw 0.6vw !important;
+    text-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.9),
+        0 0.3vw 0.6vw rgba(255, 215, 0, 0.6),
+        0 0 1.5vw rgba(255, 215, 0, 0.3);
+    transform: scale(1.08);
+    transform-origin: center;
+    position: relative;
+    z-index: 10;
+}
+
+.word.emphasis.word-not-narrated-yet,
+.word.emphasis.word-already-narrated {
+    color: #e6dbac !important;
+    font-weight: 700;
+    font-size: 4vw !important;
+    padding: 0.5vw 0.6vw !important;
+    position: relative;
+    z-index: 5;
+}
+
+/* AI Word Highlighting - Highlight (medium importance) */
+.word.highlight.word-being-narrated {
+    color: #fffacd !important;
+    font-size: 4.1vw !important;
+    padding: 0.5vw 0.6vw !important;
+    text-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.8),
+        0 0.2vw 0.5vw rgba(255, 215, 0, 0.3);
+    transform: scale(1.04);
+    transform-origin: center;
+    position: relative;
+    z-index: 8;
+}
+
+.word.highlight.word-not-narrated-yet,
+.word.highlight.word-already-narrated {
+    color: #faf5e6 !important;
+    font-size: 4vw !important;
+    padding: 0.5vw 0.6vw !important;
+    position: relative;
+    z-index: 3;
+}
+
+/* Elegant fade-in animation */
+@keyframes cinematic-fade-in {
+    0% {
+        opacity: 0;
+        transform: translateY(0.5vw);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.word {
+    animation: cinematic-fade-in 0.5s ease-out;
+}
+
+/* Gentle glow animation for emphasis */
+@keyframes cinematic-glow {
+    0%, 100% {
+        text-shadow:
+            0 1px 2px rgba(0, 0, 0, 0.9),
+            0 0.3vw 0.6vw rgba(255, 215, 0, 0.5),
+            0 0 1.2vw rgba(255, 215, 0, 0.2);
+    }
+    50% {
+        text-shadow:
+            0 1px 2px rgba(0, 0, 0, 0.9),
+            0 0.4vw 0.8vw rgba(255, 215, 0, 0.7),
+            0 0 2vw rgba(255, 215, 0, 0.4);
+    }
+}
+
+.word.emphasis.word-being-narrated {
+    animation: cinematic-fade-in 0.5s ease-out, cinematic-glow 3s ease-in-out infinite;
+}
+
+/* Subtle pulse for highlights */
+@keyframes cinematic-pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.9;
+    }
+}
+
+.word.highlight.word-being-narrated {
+    animation: cinematic-fade-in 0.5s ease-out, cinematic-pulse 2.5s ease-in-out infinite;
+}
