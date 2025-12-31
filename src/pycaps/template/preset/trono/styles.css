@@ -35,6 +35,13 @@
     transition: all 0.3s ease;
     display: inline-block;
     line-height: 1.2;
+    overflow: visible;
+}
+
+/* First word needs extra padding for drop cap */
+.word.first-word-in-segment {
+    padding: 1vw 0.4vw 0.6vw 0.4vw;
+    overflow: visible;
 }
 
 /* First letter of first word - DROP CAP with WrathStyles */
@@ -42,9 +49,10 @@
     font-family: 'WrathStyles', serif;
     font-size: 12vw;
     float: left;
-    line-height: 0.85;
-    margin-right: 0.2vw;
-    margin-top: -0.3vw;
+    line-height: 1;
+    margin-right: 0.3vw;
+    margin-top: -0.5vw;
+    margin-left: -0.3vw;
     color: white;
     text-transform: uppercase;
     /* Enhanced black border for drop cap */
@@ -58,6 +66,8 @@
         -4px 4px 2px black,
         4px 4px 2px black,
         0 0.5vw 1vw rgba(0, 0, 0, 0.95);
+    display: inline-block;
+    overflow: visible;
 }
 
 /* Word narration states */
