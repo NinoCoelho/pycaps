@@ -47,7 +47,7 @@
 
 /* AI Word Highlighting - Emphasis (high importance) */
 .word.emphasis.word-being-narrated {
-    color: #FFD700 !important;
+    color: #FF0000 !important;
     font-size: 5vw !important;
     text-shadow:
         -2px -2px 0 black,
@@ -58,7 +58,7 @@
         3px -3px 2px black,
         -3px 3px 2px black,
         3px 3px 2px black,
-        0 0 2vw rgba(255, 215, 0, 0.8),
+        0 0 2vw rgba(255, 0, 0, 0.8),
         0 0.5vw 1vw rgba(0, 0, 0, 0.9);
     transform: scale(1.1);
     transform-origin: center;
@@ -68,7 +68,7 @@
 
 .word.emphasis.word-not-narrated-yet,
 .word.emphasis.word-already-narrated {
-    color: #ffeeb0 !important;
+    color: #ff6666 !important;
     font-size: 5vw !important;
     position: relative;
     z-index: 5;
@@ -76,7 +76,7 @@
 
 /* AI Word Highlighting - Highlight (medium importance) */
 .word.highlight.word-being-narrated {
-    color: #FFFF00 !important;
+    color: #FF3333 !important;
     font-size: 5vw !important;
     text-shadow:
         -2px -2px 0 black,
@@ -87,7 +87,7 @@
         3px -3px 2px black,
         -3px 3px 2px black,
         3px 3px 2px black,
-        0 0 1.5vw rgba(255, 255, 0, 0.6),
+        0 0 1.5vw rgba(255, 51, 51, 0.6),
         0 0.5vw 1vw rgba(0, 0, 0, 0.9);
     transform: scale(1.05);
     transform-origin: center;
@@ -97,7 +97,7 @@
 
 .word.highlight.word-not-narrated-yet,
 .word.highlight.word-already-narrated {
-    color: #ffffcc !important;
+    color: #ff9999 !important;
     font-size: 5vw !important;
     position: relative;
     z-index: 3;
