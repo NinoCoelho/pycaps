@@ -7,7 +7,8 @@
         "min_number_of_lines": 1,
         "on_text_overflow_strategy": "exceed_width",
         "vertical_align": {
-            "align": "center"
+            "align": "center",
+            "offset": 0.15
         }
     },
     "splitters": [
