@@ -29,7 +29,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "openai-whisper",
+    # "openai-whisper",  # Removed - conflicts with mlx-whisper
     "faster-whisper>=1.2.0",
     "playwright",
     "Pillow",
@@ -47,7 +47,7 @@ dependencies = [
     "soundfile>=0.12.0",
     "torch>=1.13.0",
     "deep-translator>=1.11.4",
-    "googletrans==4.0.0rc1"
+    # "googletrans==4.0.0rc1"  # Removed - forces httpx==0.13.3
 ]
 
 [project.scripts]

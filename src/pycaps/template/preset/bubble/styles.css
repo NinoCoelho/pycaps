@@ -1,19 +1,7 @@
 /* Bubble Template - Comic Speech Bubble Style */
 
-/* Font Face Declarations */
-@font-face {
-    font-family: 'Quicksand';
-    src: url('resources/Quicksand.ttf') format('woff2');
-    font-weight: 400;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Quicksand';
-    src: url('resources/Quicksand-Bold.ttf') format('woff2');
-    font-weight: 700;
-    font-style: normal;
-}
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap');
 
 /* Base word styling - speech bubble appearance */
 .word {
@@ -90,14 +78,13 @@
 .word.emphasis.word-being-narrated {
     background: #FF6B6B !important;
     color: white !important;
-    font-size: 4.2vw !important;
-    padding: 0.9vw 1.1vw !important;
+    padding: 0.8vw 1vw !important;
     border-color: #000 !important;
     border-width: 0.3vw;
     box-shadow:
         0.4vw 0.4vw 0 rgba(255, 107, 107, 0.4),
         inset 0 0.1vw 0.2vw rgba(255, 255, 255, 0.3);
-    transform: scale(1.15);
+    transform: scale(1.08);
     position: relative;
     z-index: 10;
     animation: bubble-pop-in 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55),
@@ -108,7 +95,6 @@
 .word.emphasis.word-already-narrated {
     background: #FFB3B3 !important;
     color: #222 !important;
-    font-size: 3.8vw !important;
     padding: 0.8vw 1vw !important;
     position: relative;
     z-index: 5;
@@ -119,13 +105,12 @@
 .word.highlight.word-being-narrated {
     background: #4ECDC4 !important;
     color: white !important;
-    font-size: 4vw !important;
-    padding: 0.85vw 1.05vw !important;
+    padding: 0.8vw 1vw !important;
     border-color: #000 !important;
     box-shadow:
         0.3vw 0.3vw 0 rgba(78, 205, 196, 0.4),
         inset 0 0.1vw 0.2vw rgba(255, 255, 255, 0.3);
-    transform: scale(1.08);
+    transform: scale(1.05);
     position: relative;
     z-index: 8;
     animation: bubble-pop-in 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55),
@@ -136,7 +121,6 @@
 .word.highlight.word-already-narrated {
     background: #B3E8E3 !important;
     color: #222 !important;
-    font-size: 3.8vw !important;
     padding: 0.8vw 1vw !important;
     position: relative;
     z-index: 3;
@@ -146,13 +130,13 @@
 /* Emphasis pulse animation */
 @keyframes bubble-emphasis-pulse {
     0%, 100% {
-        transform: scale(1.15);
+        transform: scale(1.08);
         box-shadow:
             0.4vw 0.4vw 0 rgba(255, 107, 107, 0.4),
             inset 0 0.1vw 0.2vw rgba(255, 255, 255, 0.3);
     }
     50% {
-        transform: scale(1.18);
+        transform: scale(1.1);
         box-shadow:
             0.5vw 0.5vw 0 rgba(255, 107, 107, 0.5),
             inset 0 0.1vw 0.2vw rgba(255, 255, 255, 0.4);
@@ -162,10 +146,10 @@
 /* Highlight bounce animation */
 @keyframes bubble-highlight-bounce {
     0%, 100% {
-        transform: scale(1.08);
+        transform: scale(1.05);
     }
     50% {
-        transform: scale(1.1);
+        transform: scale(1.06);
     }
 }
 

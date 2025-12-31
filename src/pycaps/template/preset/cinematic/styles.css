@@ -1,19 +1,7 @@
 /* Cinematic Template - Film Letterbox Style */
 
-/* Font Face Declarations */
-@font-face {
-    font-family: 'PlayfairDisplay';
-    src: url('resources/PlayfairDisplay.ttf') format('woff2');
-    font-weight: 400;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'PlayfairDisplay';
-    src: url('resources/PlayfairDisplay-Bold.ttf') format('woff2');
-    font-weight: 700;
-    font-style: normal;
-}
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
 
 /* Cinematic letterbox framing */
 .subtitle-container {
@@ -80,13 +68,12 @@
 .word.emphasis.word-being-narrated {
     color: #FFD700 !important;
     font-weight: 700;
-    font-size: 4.2vw !important;
     padding: 0.5vw 0.6vw !important;
     text-shadow:
         0 1px 2px rgba(0, 0, 0, 0.9),
         0 0.3vw 0.6vw rgba(255, 215, 0, 0.6),
         0 0 1.5vw rgba(255, 215, 0, 0.3);
-    transform: scale(1.08);
+    transform: scale(1.05);
     transform-origin: center;
     position: relative;
     z-index: 10;
@@ -96,7 +83,6 @@
 .word.emphasis.word-already-narrated {
     color: #e6dbac !important;
     font-weight: 700;
-    font-size: 4vw !important;
     padding: 0.5vw 0.6vw !important;
     position: relative;
     z-index: 5;
@@ -105,12 +91,11 @@
 /* AI Word Highlighting - Highlight (medium importance) */
 .word.highlight.word-being-narrated {
     color: #fffacd !important;
-    font-size: 4.1vw !important;
     padding: 0.5vw 0.6vw !important;
     text-shadow:
         0 1px 2px rgba(0, 0, 0, 0.8),
         0 0.2vw 0.5vw rgba(255, 215, 0, 0.3);
-    transform: scale(1.04);
+    transform: scale(1.03);
     transform-origin: center;
     position: relative;
     z-index: 8;
@@ -119,7 +104,6 @@
 .word.highlight.word-not-narrated-yet,
 .word.highlight.word-already-narrated {
     color: #faf5e6 !important;
-    font-size: 4vw !important;
     padding: 0.5vw 0.6vw !important;
     position: relative;
     z-index: 3;

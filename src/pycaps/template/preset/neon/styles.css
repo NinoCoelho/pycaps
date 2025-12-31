@@ -1,12 +1,7 @@
 /* Neon Template - 80s Synthwave Style */
 
-/* Font Face Declaration */
-@font-face {
-    font-family: 'Righteous';
-    src: url('resources/Righteous.ttf') format('woff2');
-    font-weight: normal;
-    font-style: normal;
-}
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
 
 /* Base word styling - neon tube effect */
 .word {
@@ -87,7 +82,6 @@
 /* AI Word Highlighting - Emphasis (high importance) */
 .word.emphasis.word-being-narrated {
     color: #FFFF00 !important;
-    font-size: 4.5vw !important;
     padding: 0.6vw 0.5vw !important;
     /* Intense yellow neon glow */
     text-shadow:
@@ -100,7 +94,7 @@
         0 0 1.5vw #FFFF00,
         0 0 2.5vw #FFFF00,
         0 0 3vw #FFFF00;
-    transform: scale(1.1);
+    transform: scale(1.05);
     transform-origin: center;
     position: relative;
     z-index: 10;
@@ -110,7 +104,6 @@
 .word.emphasis.word-not-narrated-yet,
 .word.emphasis.word-already-narrated {
     color: #FFCC00 !important;
-    font-size: 4vw !important;
     padding: 0.6vw 0.5vw !important;
     position: relative;
     z-index: 5;
@@ -126,7 +119,6 @@
 /* AI Word Highlighting - Highlight (medium importance) */
 .word.highlight.word-being-narrated {
     color: #00FFFF !important;
-    font-size: 4.2vw !important;
     padding: 0.6vw 0.5vw !important;
     /* Bright cyan glow */
     text-shadow:
@@ -138,7 +130,7 @@
         0 0 1vw #00FFFF,
         0 0 1.5vw #00FFFF,
         0 0 2.5vw #00FFFF;
-    transform: scale(1.05);
+    transform: scale(1.03);
     transform-origin: center;
     position: relative;
     z-index: 8;
@@ -148,7 +140,6 @@
 .word.highlight.word-not-narrated-yet,
 .word.highlight.word-already-narrated {
     color: #66FFFF !important;
-    font-size: 4vw !important;
     padding: 0.6vw 0.5vw !important;
     position: relative;
     z-index: 3;
