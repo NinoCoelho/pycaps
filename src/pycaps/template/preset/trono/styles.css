@@ -15,6 +15,14 @@
     font-style: normal;
 }
 
+/* Container-level styles for drop cap accommodation */
+.subtitle-container,
+.line,
+.segment {
+    overflow: visible !important;
+    padding: 2vw 1vw !important;
+}
+
 /* Base word styling - All words use Marcellus */
 .word {
     font-family: 'Marcellus', serif;
