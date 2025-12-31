@@ -36,12 +36,13 @@
 /* First letter of first word - DROP CAP with WrathStyles */
 .word.first-word-in-segment::first-letter {
     font-family: 'WrathStyles', serif;
-    font-size: 7vw;
+    font-size: 9vw;
     float: left;
-    line-height: 0.8;
-    margin-right: 0.3vw;
-    margin-top: 0.1vw;
+    line-height: 0.85;
+    margin-right: 0.2vw;
+    margin-top: -0.3vw;
     color: white;
+    text-transform: uppercase;
     /* Enhanced black border for drop cap */
     text-shadow:
         -2px -2px 0 black,
