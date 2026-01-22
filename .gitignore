@@ -1,17 +1,42 @@
-__pycache__
-*.mp4
-.env
-.vscode
-ideas.md
-*.png
-examples/*.json
+# Python
+__pycache__/
+*.py[cod]
 *.egg-info/
+*.egg
+
+# macOS
+._*
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Environment
+.env
+.env.*
+.secrets
+
+# Video/Output
+*.mp4
+*.mov
+*.avi
+
+# IDE
+.vscode/
+.idea/
+
+# Testing/Temp
+test_*.json
+*_output.json
+sample_*.json
+installed_*.json
+
+# Docs/Notes
+ideas.md
+TODO.md
+research/
+
+# Build
 tools
 examples
-dumper.py
-*.txt
 demo
-TODO.md
-research
-.secrets
-src/pycaps/.___pycache__
+dumper.py
