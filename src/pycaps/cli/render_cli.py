@@ -59,6 +59,8 @@ def render(
     portuguese_vocab: list[str] = typer.Option([], "--pt-vocab", help="Additional Portuguese vocabulary terms (can be used multiple times)", rich_help_panel="Whisper"),
     transcription_quality: Optional[str] = typer.Option(None, "--transcription-quality", help="Anti-hallucination preset: maximum_quality, balanced, fast_processing, podcasts, short_videos", rich_help_panel="Whisper", show_default=False),
     use_faster_whisper: bool = typer.Option(False, "--faster-whisper", help="Use faster-whisper (4x faster, less hallucinations)", rich_help_panel="Whisper", show_default=False),
+    disable_vad: bool = typer.Option(False, "--disable-vad", help="Disable VAD (Voice Activity Detection) - useful for music videos to capture all words", rich_help_panel="Whisper", show_default=False),
+    hallucination_silence_threshold: Optional[float] = typer.Option(None, "--hallucination-threshold", help="Silence threshold to prevent hallucinations (seconds). Lower = more aggressive. Default: 2.0", rich_help_panel="Whisper", show_default=False),
 
     # Translation options
     translate: Optional[str] = typer.Option(None, "--translate", help="Enable translation from source to target language (e.g., en-pt, en-pt-BR)", rich_help_panel="Translation", show_default=False),
@@ -147,12 +149,16 @@ def render(
     
     # Regular transcription (only if not using translation)
     elif use_faster_whisper:
-        typer.echo("Using faster-whisper for transcription (4x faster, less hallucinations)...")
+        threshold = hallucination_silence_threshold if hallucination_silence_threshold is not None else (2.0 if not disable_vad else None)
+        if disable_vad:
+            typer.echo("Using faster-whisper with VAD DISABLED (for music videos)...")
+        else:
+            typer.echo("Using faster-whisper for transcription (4x faster, less hallucinations)...")
         builder.with_faster_whisper(
             model_size=whisper_model if whisper_model else "base",
             language=language,
-            use_vad=True,
-            hallucination_silence_threshold=2.0
+            use_vad=not disable_vad,
+            hallucination_silence_threshold=threshold
         )
     # TODO: this has a little issue (if you set lang via js + whisper model by cli, it will change the lang to None)
     elif language or whisper_model or initial_prompt or portuguese_vocab or transcription_quality: 

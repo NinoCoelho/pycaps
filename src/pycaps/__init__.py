@@ -10,4 +10,4 @@ from .layout.definitions import *
 from .ai import LlmProvider
 from .template import TemplateLoader, TemplateFactory, DEFAULT_TEMPLATE_NAME
 
-__version__ = "0.3.6" 
+__version__ = "0.4.0" 
